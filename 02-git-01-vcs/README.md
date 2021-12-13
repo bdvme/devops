@@ -17,3 +17,7 @@
 - _файлы в названии которых есть `'_override.tf.json'`_
 - _файлы `.terraformrc`_
 - _файлы `terraform.rc`_
+
+
+
+
