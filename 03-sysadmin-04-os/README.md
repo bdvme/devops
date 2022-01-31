@@ -2,7 +2,7 @@
 
 # Домашняя работа
 
-## Урок 3.3 Операционные системы, лекция 2
+## Урок 3.4 Операционные системы, лекция 2
 
 1. На лекции мы познакомились с [node_exporter](https://github.com/prometheus/node_exporter/releases). В демонстрации его исполняемый файл запускался в background. Этого достаточно для демо, но не для настоящей production-системы, где процессы должны находиться под внешним управлением. Используя знания из лекции по systemd, создайте самостоятельно простой [unit-файл](https://www.freedesktop.org/software/systemd/man/systemd.service.html) для node_exporter:
 
