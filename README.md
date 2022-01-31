@@ -9,3 +9,4 @@
 * [03-sysadmin-01-terminal "Work in terminal, Lesson 1"](https://github.com/bdvme/devops/tree/main/03-sysadmin-01-terminal)
 * [03-sysadmin-02-terminal "Work in terminal, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-02-terminal)
 * [03-sysadmin-03-os "Operation systems, Lesson 1"](https://github.com/bdvme/devops/tree/main/03-sysadmin-03-os)
+* [03-sysadmin-04-os "Operation systems, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-04-os)
