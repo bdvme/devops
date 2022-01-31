@@ -173,14 +173,14 @@ $ sysctl -n fs.nr_open
 
 ###### Ответ:
 
-  * ```bash
+  ```bash
   $ screen
   $ sudo -i
   unshare -f --pid --mount-proc sleep 1h
   ```
   * Делаем Detach screen `Ctrl+A D`
-
-  * ```bash
+  
+  ```bash
   $ sudo -i
   ps -e | grep sleep
   2407 pts/3    00:00:00 sleep
