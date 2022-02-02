@@ -34,17 +34,19 @@ After=network.target
 User=nodeusr
 Group=nodeusr
 Type=simple
-ExecStart=/usr/local/bin/node_exporter
+ExecStart=/usr/local/bin/node_exporter $EXTRA_OPTS
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 EnvironmentFile=/etc/default/node_exporter
+StandardOutput=file:/var/log/node_exporter.log
+StandardError=file:/var/log/node_exporter.log
 [Install]
 WantedBy=multi-user.target
 ```
   * предусмотрел добавление опций через внешний файл
 ```bash
 $ cat /etc/default/node_exporter
-SOME_VAR="some value"
+EXTRA_OPTS="--log.level=info"
 ```
   * Разрешил автозапуск и запустил службу
 ```bash
@@ -56,18 +58,19 @@ $ sudo systemctl start node_exporter
   ```bash
 $ systemctl status node_exporter
 ● node_exporter.service - Node Exporter Service
-     Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: enabled)
-     Active: active (running) since Wed 2022-01-26 08:01:25 UTC; 33min ago
-   Main PID: 659 (node_exporter)
+     Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor prese>
+     Active: active (running) since Wed 2022-02-02 08:05:11 UTC; 9s ago
+   Main PID: 32060 (node_exporter)
       Tasks: 5 (limit: 2278)
-     Memory: 13.1M
+     Memory: 2.5M
      CGroup: /system.slice/node_exporter.service
-             └─659 /usr/local/bin/node_exporter
+             └─32060 /usr/local/bin/node_exporter --log.level=info
   ```
+
   * проверил подгрузку внешнего файла указанного в unit-файле
 ```bash
-$ sudo cat /proc/659/environ
-LANG=en_US.UTF-8PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/binHOME=/home/nodeusrLOGNAME=nodeusrUSER=nodeusrINVOCATION_ID=f4cbfda6eca545719328d51f5f1306aeJOURNAL_STREAM=9:21180SOME_VAR=some value
+$ sudo cat /proc/32060/environ
+LANG=en_US.UTF-8LANGUAGE=en_US:PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/binHOME=/home/nodeusrLOGNAME=nodeusrUSER=nodeusrINVOCATION_ID=a5120c2c65f840df97e8b8d452409a8bEXTRA_OPTS=--log.level=info
 ```
 
 2. Ознакомьтесь с опциями node_exporter и выводом `/metrics` по-умолчанию. Приведите несколько опций, которые вы бы выбрали для базового мониторинга хоста по CPU, памяти, диску и сети.
@@ -179,7 +182,7 @@ $ sysctl -n fs.nr_open
   unshare -f --pid --mount-proc sleep 1h
   ```
   * Делаем Detach screen `Ctrl+A D`
-  
+
   ```bash
   $ sudo -i
   ps -e | grep sleep
@@ -245,4 +248,3 @@ root          26  0.0  0.1   8892  3332 pts/0    R+   14:24   0:00 ps aux
   $ cat /sys/fs/cgroup/pids/user.slice/user-1000.slice/pids.max
   7596
   ```
-   
