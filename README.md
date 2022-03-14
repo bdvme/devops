@@ -11,4 +11,5 @@
 * [03-sysadmin-03-os "Operation systems, Lesson 1"](https://github.com/bdvme/devops/tree/main/03-sysadmin-03-os)
 * [03-sysadmin-04-os "Operation systems, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-04-os)
 * [03-sysadmin-05-fs "File systems"](https://github.com/bdvme/devops/tree/main/03-sysadmin-05-fs)
-* [03-sysadmin-06-net "Сomputer networks"](https://github.com/bdvme/devops/tree/main/03-sysadmin-06-net)
+* [03-sysadmin-06-net "Сomputer networks, Lesson 1"](https://github.com/bdvme/devops/tree/main/03-sysadmin-06-net)
+* [03-sysadmin-07-net "Сomputer networks, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-07-net)
