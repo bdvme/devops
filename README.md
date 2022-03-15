@@ -14,3 +14,4 @@
 * [03-sysadmin-06-net "Сomputer networks, Lesson 1"](https://github.com/bdvme/devops/tree/main/03-sysadmin-06-net)
 * [03-sysadmin-07-net "Сomputer networks, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-07-net)
 * [03-sysadmin-08-net "Сomputer networks, Lesson 3"](https://github.com/bdvme/devops/tree/main/03-sysadmin-08-net)
+* [03-sysadmin-09-security "Information systems security, Lesson 3"](https://github.com/bdvme/devops/tree/main/03-sysadmin-09-security)
