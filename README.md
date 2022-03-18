@@ -15,3 +15,4 @@
 * [03-sysadmin-07-net "Сomputer networks, Lesson 2"](https://github.com/bdvme/devops/tree/main/03-sysadmin-07-net)
 * [03-sysadmin-08-net "Сomputer networks, Lesson 3"](https://github.com/bdvme/devops/tree/main/03-sysadmin-08-net)
 * [03-sysadmin-09-security "Information systems security"](https://github.com/bdvme/devops/tree/main/03-sysadmin-09-security)
+* [04-script-01-bash "Bash Command Shell: Practical Skills"](https://github.com/bdvme/devops/tree/main/04-script-01-bash)

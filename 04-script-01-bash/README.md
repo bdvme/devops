@@ -58,14 +58,14 @@ done
 #!/usr/bin/env bash
 array_ip=("192.168.0.1:80" "173.194.222.113:80" "87.250.250.242:80")
 declare -i count
-count=0
 while ((1==1)); do
   for ip in ${array_ip[@]}; do
-    while (($count < 6)); do
-      curl $ip
+    count=0
+    while (($count < 5)); do
+      curl --connect-timeout 2 $ip > /dev/null 2>&1
       if (($? != 0)); then
         NOW=`date '+%F_%H:%M:%S'`
-        echo $NOW: Error $ip No respond >> curl.log
+        echo $NOW: Error $ip No respond >> respond.log
         count+=1
       else
         break
@@ -80,14 +80,20 @@ done
 
 ### Ваш скрипт:
 ```bash
-???
-```
-
-## Дополнительное задание (со звездочкой*) - необязательно к выполнению
-
-Мы хотим, чтобы у нас были красивые сообщения для коммитов в репозиторий. Для этого нужно написать локальный хук для git, который будет проверять, что сообщение в коммите содержит код текущего задания в квадратных скобках и количество символов в сообщении не превышает 30. Пример сообщения: \[04-script-01-bash\] сломал хук.
-
-### Ваш скрипт:
-```bash
-???
+#!/usr/bin/env bash
+array_ip=("173.194.222.113:80" "87.250.250.242:80" "192.168.0.1:80")
+declare -i count=1
+while (($count==1)); do
+  for ip in ${array_ip[@]}; do
+  	NOW=`date '+%F_%H:%M:%S'`
+    curl --connect-timeout 2 $ip > /dev/null 2>&1
+    if (($? == 0)); then
+    	echo $NOW: $ip Ok >> respond.log
+    else
+    	echo $NOW: $ip Error (no respond) >> error.log
+      count=0
+      break
+    fi
+  done
+done
 ```
