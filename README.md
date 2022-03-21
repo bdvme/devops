@@ -17,3 +17,4 @@
 * [03-sysadmin-09-security "Information systems security"](https://github.com/bdvme/devops/tree/main/03-sysadmin-09-security)
 * [04-script-01-bash "Bash Command Shell: Practical Skills"](https://github.com/bdvme/devops/tree/main/04-script-01-bash)
 * [04-script-02-py "Using Python to solve typical DevOps tasks"](https://github.com/bdvme/devops/tree/main/04-script-02-py)
+* [04-script-03-yaml "JSON and YAML markup languages"](https://github.com/bdvme/devops/tree/main/04-script-03-yaml)
