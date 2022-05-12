@@ -19,3 +19,4 @@
 * [04-script-02-py "Using Python to solve typical DevOps tasks"](https://github.com/bdvme/devops/tree/main/04-script-02-py)
 * [04-script-03-yaml "JSON and YAML markup languages"](https://github.com/bdvme/devops/tree/main/04-script-03-yaml)
 * [05-virt-01-basics "Introduction to virtualization. Types and functions of hypervisors. Overview of the vendor market and areas of application."](https://github.com/bdvme/devops/tree/main/05-virt-01-basics)
+* [05-virt-02-iaac "Application of IaaC principles in working with virtual machines."](https://github.com/bdvme/devops/tree/main/05-virt-02-iaac)
