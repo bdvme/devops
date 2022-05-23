@@ -1,0 +1,91 @@
+---
+
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+
+    tasks:
+      - name: Create directory for ssh-keys
+        file: state=directory mode=0700 dest=/root/.ssh/
+
+      - name: Adding rsa-key in /root/.ssh/authorized_keys
+        copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
+        ignore_errors: yes
+
+      - name: Checking DNS
+        command: host -t A google.com
+
+      - name: Installing tools
+        apt: >
+          package={{ item }}
+          state=present
+          update_cache=yes
+        with_items:
+          - git
+          - curl
+          - python3
+          - python3-pip
+
+      - name: Installing docker
+        shell: |
+          curl -fsSL get.docker.com -o get-docker.sh
+          chmod +x get-docker.sh
+          ./get-docker.sh
+
+      - name: Add the current user to docker group
+        user: name=vagrant append=yes groups=docker
+      - name: Create directory
+        file:
+          path=./docker_nginx
+          state=directory
+          mode=0755
+      - name: Create index.html
+        copy:
+          dest: "./docker_nginx/index.html"
+          content: |
+            <html>
+            <head>
+            Hey, Netology
+            </head>
+            <body>
+            <h1>I`m DevOps Engineer!</h1>
+            </body>
+            </html>
+      - name: Create Dockerfile
+        copy:
+          dest: "./docker_nginx/Dockerfile"
+          content: |
+            FROM nginx:latest
+            COPY ./index.html /usr/share/nginx/html/index.html
+      - name: Force install pip module docker
+        pip:
+          name: docker
+          state: latest
+      - name: Docker login
+        docker_login:
+          username: secure_login
+          password: secure_pass
+      - name: Build docker image
+        docker_image:
+          name: webserver:latest
+          repository: reactorsystem/devops
+          source: build
+          push: yes
+          build:
+            dockerfile: Dockerfile
+            path: "./docker_nginx"
+          tag: v1.0
+          state: present
+      - name: Restart a container
+        docker_container:
+          name: webserver
+          image: reactorsystem/devops
+          state: started
+          restart: yes
+#          links:
+#            - "myredis:aliasedredis"
+#          devices:
+#            - "/dev/sda:/dev/xvda:rwm"
+          ports:
+            - "8080:80"
