@@ -27,6 +27,32 @@ Hey, Netology
 
 ###### Ответ:
 
+* Используя конфигурационные файлы из предыдущего домашнего задания [05-virt-02-iaac](https://github.com/bdvme/devops/tree/main/05-virt-02-iaac), модифицировав файлы [provision.yml](https://github.com/bdvme/devops/tree/main/05-virt-03-docker/src/ansible/provision.yml), [Vagrantfile](https://github.com/bdvme/devops/tree/main/05-virt-03-docker/src/vagrant/Vagrantfile) и добавив файлы [Dockerfile](https://github.com/bdvme/devops/tree/main/05-virt-03-docker/src/webserver/Dockerfile), [index.html](https://github.com/bdvme/devops/tree/main/05-virt-03-docker/src/webserver/index.html) реализовал функционал требующийся в задании.
+
+```Bash
+cd 05-virt-03-docker
+tree
+.
+├── README.md
+└── src
+    ├── ansible
+    │   ├── inventory
+    │   └── provision.yml
+    ├── vagrant
+    │   ├── Vagrantfile
+    │   └── ansible.cfg
+    └── webserver
+        ├── Dockerfile
+        └── index.html
+
+4 directories, 7 files
+```
+
+* HTML-код содержится в файле `./src/webserver/index.html`
+* Инструкции для сборки docker образа в файле `./src/webserver/Dockerfile`
+
+* Ссылка на форк: https://hub.docker.com/r/bdvme/devtest/tags
+
 ## Задача 2
 
 Посмотрите на сценарий ниже и ответьте на вопрос:

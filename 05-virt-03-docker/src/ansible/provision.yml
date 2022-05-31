@@ -4,7 +4,18 @@
     become: yes
     become_user: root
     remote_user: vagrant
-
+    vars_prompt:
+      - name: registry
+        prompt: "Registry"
+        private: no
+        default: "https://index.docker.io/v1"
+      - name: username
+        prompt: "Username"
+        private: no
+        default: "username"
+      - name: password
+        prompt: "Password"
+        default: "token"
     tasks:
       - name: Create directory for ssh-keys
         file: state=directory mode=0700 dest=/root/.ssh/
@@ -12,9 +23,6 @@
       - name: Adding rsa-key in /root/.ssh/authorized_keys
         copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
         ignore_errors: yes
-
-      - name: Checking DNS
-        command: host -t A google.com
 
       - name: Installing tools
         apt: >
@@ -35,41 +43,42 @@
 
       - name: Add the current user to docker group
         user: name=vagrant append=yes groups=docker
+
       - name: Create directory
         file:
           path=./docker_nginx
           state=directory
           mode=0755
-      - name: Create index.html
+
+      - name: Copy files for webserver
         copy:
-          dest: "./docker_nginx/index.html"
-          content: |
-            <html>
-            <head>
-            Hey, Netology
-            </head>
-            <body>
-            <h1>I`m DevOps Engineer!</h1>
-            </body>
-            </html>
-      - name: Create Dockerfile
-        copy:
-          dest: "./docker_nginx/Dockerfile"
-          content: |
-            FROM nginx:latest
-            COPY ./index.html /usr/share/nginx/html/index.html
-      - name: Force install pip module docker
+          src: "../webserver/{{ item }}"
+          dest: "./docker_nginx"
+        with_items:
+          - "index.html"
+          - "Dockerfile"
+
+      - name: Install docker.py
         pip:
           name: docker
-          state: latest
+          state: present
+
+      - name: Start docker service
+        service:
+          name: docker
+          state: restarted
+          enabled: yes
+
       - name: Docker login
         docker_login:
-          username: secure_login
-          password: secure_pass
+          registry: "{{ registry }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+
       - name: Build docker image
         docker_image:
           name: webserver:latest
-          repository: reactorsystem/devops
+          repository: bdvme/devtest
           source: build
           push: yes
           build:
@@ -77,15 +86,12 @@
             path: "./docker_nginx"
           tag: v1.0
           state: present
+
       - name: Restart a container
         docker_container:
           name: webserver
-          image: reactorsystem/devops
+          image: bdvme/devtest
           state: started
           restart: yes
-#          links:
-#            - "myredis:aliasedredis"
-#          devices:
-#            - "/dev/sda:/dev/xvda:rwm"
           ports:
             - "8080:80"

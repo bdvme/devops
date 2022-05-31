@@ -38,7 +38,12 @@ Vagrant.configure(2) do |config|
         setup.playbook = "../ansible/provision.yml"
         setup.become = true
         setup.verbose = ""
-        setup.extra_vars = { ansible_user: 'vagrant' }
+        setup.extra_vars = {
+          ansible_user: 'vagrant',
+          registry: 'https://index.docker.io/v1',
+          username: 'username',
+          password: 'token'
+        }
       end
     end
   end
