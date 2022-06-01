@@ -20,3 +20,4 @@
 * [04-script-03-yaml "JSON and YAML markup languages"](https://github.com/bdvme/devops/tree/main/04-script-03-yaml)
 * [05-virt-01-basics "Introduction to virtualization. Types and functions of hypervisors. Overview of the vendor market and areas of application."](https://github.com/bdvme/devops/tree/main/05-virt-01-basics)
 * [05-virt-02-iaac "Application of IaaC principles in working with virtual machines."](https://github.com/bdvme/devops/tree/main/05-virt-02-iaac)
+* [05-virt-03-docker "Introduction. Ecosystem. Architecture. The life cycle of a Docker container."](https://github.com/bdvme/devops/tree/main/05-virt-03-docker)

@@ -25,10 +25,10 @@
         ignore_errors: yes
 
       - name: Installing tools
-        apt: >
-          package={{ item }}
-          state=present
-          update_cache=yes
+        apt:
+          package: "{{ item }}"
+          state: present
+          update_cache: yes
         with_items:
           - git
           - curl
@@ -46,9 +46,9 @@
 
       - name: Create directory
         file:
-          path=./docker_nginx
-          state=directory
-          mode=0755
+          path: ./docker_nginx
+          state: directory
+          mode: 0755
 
       - name: Copy files for webserver
         copy:
@@ -57,7 +57,12 @@
         with_items:
           - "index.html"
           - "Dockerfile"
-
+      - name: Install docker-compose
+        apt:
+          package: "docker-compose"
+          state: present
+          update_cache: yes
+          
       - name: Install docker.py
         pip:
           name: docker
