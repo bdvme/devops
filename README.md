@@ -22,4 +22,4 @@
 * [05-virt-02-iaac "Application of IaaC principles in working with virtual machines."](https://github.com/bdvme/devops/tree/main/05-virt-02-iaac)
 * [05-virt-03-docker "Introduction. Ecosystem. Architecture. The life cycle of a Docker container."](https://github.com/bdvme/devops/tree/main/05-virt-03-docker)
 * [05-virt-04-docker-compose "Orchestration by a group of Docker containers using Docker Compose as an example."](https://github.com/bdvme/devops/tree/main/05-virt-04-docker-compose)
-* [05-virt-04-docker-swarm "Orchestration by a cluster of Docker containers using Docker Swarm as an example."](https://github.com/bdvme/devops/tree/main/05-virt-04-docker-swarm)
+* [05-virt-05-docker-swarm "Orchestration by a cluster of Docker containers using Docker Swarm as an example."](https://github.com/bdvme/devops/tree/main/05-virt-04-docker-swarm)
