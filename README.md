@@ -23,3 +23,4 @@
 * [05-virt-03-docker "Introduction. Ecosystem. Architecture. The life cycle of a Docker container."](https://github.com/bdvme/devops/tree/main/05-virt-03-docker)
 * [05-virt-04-docker-compose "Orchestration by a group of Docker containers using Docker Compose as an example."](https://github.com/bdvme/devops/tree/main/05-virt-04-docker-compose)
 * [05-virt-05-docker-swarm "Orchestration by a cluster of Docker containers using Docker Swarm as an example."](https://github.com/bdvme/devops/tree/main/05-virt-05-docker-swarm)
+* [06-db-01-basic "Types and structure of DBMS"](https://github.com/bdvme/devops/tree/main/06-db-01-basic)
