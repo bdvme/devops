@@ -19,7 +19,7 @@
 ###### Ответ:
 
 ```bash
-vagrant@build1:~/docker_postgres$ cat docker-compose.yml
+vagrant@build1:/opt/stack$ cat docker-compose.yml
 version: "3.3"
 services:
   postgres:
