@@ -1,0 +1,101 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    vars_prompt:
+      - name: registry
+        prompt: "Registry"
+        private: no
+        default: "https://index.docker.io/v1"
+      - name: username
+        prompt: "Username"
+        private: no
+        default: "username"
+      - name: password
+        prompt: "Password"
+        default: "token"
+    tasks:
+      - name: Create directory for ssh-keys
+        file: state=directory mode=0700 dest=/root/.ssh/
+
+      - name: Adding rsa-key in /root/.ssh/authorized_keys
+        copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
+        ignore_errors: yes
+
+      - name: Add Docker GPG apt Key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+      - name: Add Docker Repository
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu focal stable
+          state: present
+
+      - name: Update apt and install docker-ce
+        apt: update_cache=yes name=docker-ce state=latest
+
+      - name: Installing tools
+        apt:
+          package: "{{ item }}"
+          state: present
+          update_cache: yes
+        with_items:
+          - git
+          - curl
+          - python3
+          - python3-pip
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+
+      - name: Install Docker Module for Python
+        pip:
+          name: docker
+
+      - name: Start docker service
+        service:
+          name: docker
+          state: restarted
+          enabled: yes
+
+      - name: Add the current user to docker group
+        user: name=vagrant append=yes groups=docker
+
+      - name: Synchronization
+        copy:
+          src: stack/
+          dest: "/opt/stack/"
+          owner: root
+          group: root
+          mode: 0644
+        become: true
+
+      - name: Docker login
+        docker_login:
+          registry: "{{ registry }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+
+      - name: Build docker image
+        docker_image:
+          name: elasticsearch:v1.0
+          repository: bdvme/elasticsearch
+          source: build
+          push: yes
+          build:
+            dockerfile: Dockerfile
+            path: "/opt/stack/docker"
+          tag: v1.0
+          state: present
+
+#      - name: Restart a container
+#        docker_container:
+#          name: elasticsearch
+#          image: bdvme/elasticsearch
+#          state: started
+#          restart: yes
+#          ports:
+#            - "8080:80"
