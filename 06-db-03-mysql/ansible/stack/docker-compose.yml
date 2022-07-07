@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: qwertyui
+      MYSQL_DATABASE: test_db
+    volumes:
+      - ./backups:/var/lib/backups
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
