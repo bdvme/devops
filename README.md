@@ -26,3 +26,4 @@
 * [06-db-01-basic "Types and structure of DBMS"](https://github.com/bdvme/devops/tree/main/06-db-01-basic)
 * [06-db-02-sql "SQL"](https://github.com/bdvme/devops/tree/main/06-db-02-sql)
 * [06-db-03-mysql "MySQL"](https://github.com/bdvme/devops/tree/main/06-db-03-mysql)
+* [06-db-04-postgresql "PostgreSQL"](https://github.com/bdvme/devops/tree/main/06-db-04-postgresql)
