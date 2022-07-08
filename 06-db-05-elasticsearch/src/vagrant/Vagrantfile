@@ -14,6 +14,10 @@ servers = [
     :ssh_vm => "22",
     :http_host => "8088",
     :http_vm => "8080",
+    :elastic_p1_host => "9092",
+    :elastic_p1_vm => "9200",
+    :elastic_p2_host => "9093",
+    :elastic_p2_vm => "9300",
     :ram => 1024,
     :core => 1
   }
@@ -28,6 +32,8 @@ Vagrant.configure(2) do |config|
       node.vm.network "private_network", ip: machine[:ip]
       node.vm.network :forwarded_port, guest: machine[:http_vm], host: machine[:http_host]
       node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+      node.vm.network :forwarded_port, guest: machine[:elastic_p1_vm], host: machine[:elastic_p1_host]
+      node.vm.network :forwarded_port, guest: machine[:elastic_p2_vm], host: machine[:elastic_p2_host]
       node.vm.provider "virtualbox" do |vb|
         vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
         vb.customize ["modifyvm", :id, "--cpus", machine[:core]]
