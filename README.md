@@ -29,3 +29,4 @@
 * [06-db-04-postgresql "PostgreSQL"](https://github.com/bdvme/devops/tree/main/06-db-04-postgresql)
 * [06-db-05-elasticsearch "Elasticsearch"](https://github.com/bdvme/devops/tree/main/06-db-05-elasticsearch)
 * [06-db-06-troobleshooting "Troubleshooting"](https://github.com/bdvme/devops/tree/main/06-db-06-troobleshooting)
+* [07-terraform-01-intro "Infrastructure as code"](https://github.com/bdvme/devops/tree/main/07-terraform-01-intro)
