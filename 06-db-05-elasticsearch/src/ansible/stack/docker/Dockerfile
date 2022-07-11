@@ -27,4 +27,4 @@ USER elasticuser
 
 EXPOSE 9200 9300
 
-CMD ["./bin/elasticsearch", "-Ecluster.name=my_cluster", "-Enode.name=my_test"]
+CMD ["./bin/elasticsearch", "-Ecluster.name=netology_cluster", "-Enode.name=netology_test"]

@@ -1,13 +1,17 @@
 # ======================== Elasticsearch Configuration =========================
-path.data: /var/lib/data
+path:
+  data: /var/lib/data
+  logs: /var/lib/logs
+  repo: /elasticsearch-8.3.2/snapshots
 #
-path.logs: /var/lib/logs
+network:
+  host: 0.0.0.0
 #
-path.repo: /elasticsearch-8.3.2/snapshots
+discovery:
+  seed_hosts: ["127.0.0.1", "[::1]"]
 #
-network.host: 0.0.0.0
+cluster:
+  initial_master_nodes: ["netology_test"]
 #
-discovery.seed_hosts: ["127.0.0.1", "[::1]"]
-#
-cluster.initial_master_nodes: ["my_test"]
-#
+xpack.security.enabled: false
+action.destructive_requires_name: true

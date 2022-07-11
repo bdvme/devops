@@ -27,3 +27,4 @@
 * [06-db-02-sql "SQL"](https://github.com/bdvme/devops/tree/main/06-db-02-sql)
 * [06-db-03-mysql "MySQL"](https://github.com/bdvme/devops/tree/main/06-db-03-mysql)
 * [06-db-04-postgresql "PostgreSQL"](https://github.com/bdvme/devops/tree/main/06-db-04-postgresql)
+* [06-db-05-elasticsearch "Elasticsearch"](https://github.com/bdvme/devops/tree/main/06-db-05-elasticsearch)

@@ -18,7 +18,7 @@ servers = [
     :elastic_p1_vm => "9200",
     :elastic_p2_host => "9093",
     :elastic_p2_vm => "9300",
-    :ram => 1024,
+    :ram => 8192,
     :core => 1
   }
 ]

@@ -91,11 +91,15 @@
           tag: v1.0
           state: present
 
-#      - name: Restart a container
-#        docker_container:
-#          name: elasticsearch
-#          image: bdvme/elasticsearch
-#          state: started
-#          restart: yes
-#          ports:
-#            - "8080:80"
+      - name: Up max virtual memory areas
+        shell: "sysctl -w vm.max_map_count=262144"
+
+      - name: Restart a container
+        docker_container:
+          name: elasticsearch
+          image: bdvme/elasticsearch:v1.0
+          state: started
+          restart: yes
+          ports:
+            - "9200:9200"
+            - "9300:9300"
