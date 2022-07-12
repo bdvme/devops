@@ -4,6 +4,10 @@
     become: yes
     become_user: root
     remote_user: vagrant
+    vars:
+      proxy_env:
+        http_proxy: socks5://127.0.0.1:9050
+        https_proxy: socks5://127.0.0.1:9050
 
     tasks:
       - name: Create directory for ssh-keys
@@ -13,14 +17,20 @@
         copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
         ignore_errors: yes
 
+      - name: Clear 01proxy file
+        shell: "echo > /etc/apt/apt.conf.d/01proxy"
+
+      - name: Clear apt sources.list
+        copy:
+          src: stack/apt/sources.list
+          dest: /etc/apt/
+          owner: root
+          group: root
+          mode: 0644
+        become: true
+
       - name: Checking DNS
         command: host -t A google.com
-
-      - name: Add HashiCorp GPG key
-        shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-
-      - name: Add HashiCorp linux repository
-        shell: apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 
       - name: Installing tools
         apt: >
@@ -29,13 +39,86 @@
           update_cache=yes
         with_items:
           - git
+          - unzip
           - curl
           - gnupg
           - software-properties-common
+          - tor
+          - obfs4proxy
+
+      - name: Synchronization
+        copy:
+          src: stack/
+          dest: "/etc/"
+          owner: root
+          group: root
+          mode: 0644
+        become: true
+
+      - name: Enable Tor network
+        shell: "systemctl enable tor"
+
+      - name: Start Tor network
+        shell: "systemctl start tor"
+
+      - name: Checking IP
+        command: "curl ifconfig.me"
+        environment: "{{ proxy_env }}"
+        register: shell_output
+
+      - debug: var=shell_output.stdout
+
+      - name: Add HashiCorp GPG key
+        shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+        environment: "{{ proxy_env }}"
+
+      - name: Add HashiCorp linux repository
+        shell: apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        environment: "{{ proxy_env }}"
+
+      - name: Installing tools
+        apt: >
+          package={{ item }}
+          state=present
+          update_cache=yes
+        with_items:
           - terraform
+        environment: "{{ proxy_env }}"
 
-      - name: Installing docker
-        shell: curl -fsSL get.docker.com -o get-docker.sh && chmod +x get-docker.sh && ./get-docker.sh
+      - name: Make multiple version of Terraform
+        block:
+          - name: Create directory to keep the Terraform binaries
+            file:
+              path: "{{ item }}"
+              state: directory
+              owner: root
+              group: root
+              mode: 0775
+            loop:
+              - "/usr/local/tf"
+              - "/usr/local/tf/11"
+              - "/usr/local/tf/12"
 
-      - name: Add the current user to docker group
-        user: name=vagrant append=yes groups=docker
+          - name: Download the binaries for both the versions
+            block:
+              - name: Download and extract the binary for Terraform 0.11
+                command: "{{ item }}"
+                with_items:
+                  - "curl https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip -o /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
+                  - "unzip /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
+                #  - "rm /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
+                environment: "{{ proxy_env }}"
+
+              - name: Download and extract the binary for Terraform 0.12
+                command: "{{ item }}"
+                with_items:
+                  - "curl https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip -o /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
+                  - "unzip /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
+                #  - "rm /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
+                environment: "{{ proxy_env }}"
+
+          - name: Create symlinks for both the Terraform versions in /usr/bin/ directory
+            command: |
+              "ln -s /usr/local/tf/11/terraform /usr/bin/terraform11"
+              "ln -s /usr/local/tf/12/terraform /usr/bin/terraform12"
+              "chmod ugo+x /usr/bin/terraform*"

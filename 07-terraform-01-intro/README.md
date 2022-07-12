@@ -80,6 +80,20 @@ Terraform и Ansible, Packer, связку Kubernetes + Docker, а так же T
 Установите терраформ при помощи менеджера пакетов используемого в вашей операционной системе.
 В виде результата этой задачи приложите вывод команды `terraform --version`.
 
+###### Ответ:
+
+* Terraform был установлен в ВМ с использованием инструментов Vagrant и ansible.
+
+```bash
+cd src/vagrant
+vagrant up
+...
+vagrant ssh -c "terraform --version"
+Terraform v1.2.4
+on linux_amd64
+Connection to 127.0.0.1 closed.
+```
+
 ## Задача 3. Поддержка легаси кода.
 
 В какой-то момент вы обновили терраформ до новой версии, например с 0.12 до 0.13.
