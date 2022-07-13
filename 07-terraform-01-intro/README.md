@@ -103,3 +103,23 @@ Connection to 127.0.0.1 closed.
 
 В виде результата этой задачи приложите вывод `--version` двух версий терраформа доступных на вашем компьютере
 или виртуальной машине.
+
+###### Ответ:
+
+* Terraform версии 12 и 13 был установлен в ВМ с использованием инструментов Vagrant и ansible.
+
+```bash
+vagrant ssh -c "terraform12 --version"
+Terraform v0.12.20
+
+Your version of Terraform is out of date! The latest version
+is 1.2.4. You can update by downloading from https://www.terraform.io/downloads.html
+Connection to 127.0.0.1 closed.
+
+vagrant ssh -c "terraform13 --version"
+Terraform v0.13.7
+
+Your version of Terraform is out of date! The latest version
+is 1.2.4. You can update by downloading from https://www.terraform.io/downloads.html
+Connection to 127.0.0.1 closed.
+```

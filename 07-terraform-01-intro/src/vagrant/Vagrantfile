@@ -34,6 +34,7 @@ Vagrant.configure(2) do |config|
         setup.inventory_path = INVENTORY_PATH
         setup.playbook = "../ansible/provision.yml"
         setup.become = true
+        #setup.verbose = "true"
         setup.extra_vars = { ansible_user: 'vagrant' }
       end
     end

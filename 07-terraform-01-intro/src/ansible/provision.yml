@@ -17,10 +17,10 @@
         copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
         ignore_errors: yes
 
-      - name: Clear 01proxy file
+      - name: Clear /etc/apt/apt.conf.d/01proxy file
         shell: "echo > /etc/apt/apt.conf.d/01proxy"
 
-      - name: Clear apt sources.list
+      - name: Set default state /etc/apt/sources.list
         copy:
           src: stack/apt/sources.list
           dest: /etc/apt/
@@ -56,10 +56,11 @@
         become: true
 
       - name: Enable Tor network
-        shell: "systemctl enable tor"
-
-      - name: Start Tor network
-        shell: "systemctl start tor"
+        command: "{{ item }}"
+        with_items:
+          - "systemctl enable tor"
+          - "systemctl start tor"
+          - "sleep 10"
 
       - name: Checking IP
         command: "curl ifconfig.me"
@@ -96,29 +97,33 @@
               mode: 0775
             loop:
               - "/usr/local/tf"
-              - "/usr/local/tf/11"
               - "/usr/local/tf/12"
+              - "/usr/local/tf/13"
 
           - name: Download the binaries for both the versions
             block:
-              - name: Download and extract the binary for Terraform 0.11
-                command: "{{ item }}"
-                with_items:
-                  - "curl https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip -o /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
-                  - "unzip /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
-                #  - "rm /usr/local/tf/11/terraform_0.11.14_linux_amd64.zip"
-                environment: "{{ proxy_env }}"
-
               - name: Download and extract the binary for Terraform 0.12
                 command: "{{ item }}"
                 with_items:
                   - "curl https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip -o /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
-                  - "unzip /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
-                #  - "rm /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
+                  - "unzip -o /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip -d /usr/local/tf/12/"
+                  - "rm /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
+                environment: "{{ proxy_env }}"
+
+              - name: Download and extract the binary for Terraform 0.13
+                command: "{{ item }}"
+                with_items:
+                  - "curl https://releases.hashicorp.com/terraform/0.13.7/terraform_0.13.7_linux_amd64.zip -o /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip"
+                  - "unzip -o /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip -d /usr/local/tf/13/"
+                  - "rm /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip"
                 environment: "{{ proxy_env }}"
 
           - name: Create symlinks for both the Terraform versions in /usr/bin/ directory
-            command: |
-              "ln -s /usr/local/tf/11/terraform /usr/bin/terraform11"
-              "ln -s /usr/local/tf/12/terraform /usr/bin/terraform12"
-              "chmod ugo+x /usr/bin/terraform*"
+            command: "{{ item }}"
+            with_items:
+              - "rm -f /usr/bin/terraform12"
+              - "rm -f /usr/bin/terraform13"
+              - "ln -s /usr/local/tf/12/terraform /usr/bin/terraform12"
+              - "ln -s /usr/local/tf/13/terraform /usr/bin/terraform13"
+              - "chmod ugo+x /usr/bin/terraform12"
+              - "chmod ugo+x /usr/bin/terraform13"
