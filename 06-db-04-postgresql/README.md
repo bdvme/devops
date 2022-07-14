@@ -262,6 +262,35 @@ docker exec -it stack_postgres_1 pg_dump -U postgres test_database -f /var/lib/p
 
 Добавил бы свойство `UNIQUE`
 
+Так делать нельзя, потому что это низкоуровневая операция, лучшее ее не использовать вручную.
+
 ```SQL
 CREATE UNIQUE INDEX title_unique ON orders_main (title, price);
 ```
+
+Нужно делать используя `ALTER TABLE`
+
+```SQL
+ALTER TABLE orders_1 ADD CONSTRAINT title_unique_1 UNIQUE (title);
+ALTER TABLE orders_2 ADD CONSTRAINT title_unique_2 UNIQUE (title);
+
+test_database=# SELECT * FROM orders_main;
+ id |        title         | price
+----+----------------------+-------
+  1 | War and peace        |   100
+  3 | Adventure psql time  |   300
+  4 | Server gravity falls |   300
+  5 | Log gossips          |   123
+  7 | Me and my bash-pet   |   499
+  2 | My little database   |   500
+  6 | WAL never lies       |   900
+  8 | Dbiezdmin            |   501
+  9 | Letters from Earth   |   550
+(9 rows)
+
+test_database=# INSERT INTO orders_main (id, title, price) VALUES (10, 'Letters from Earth', 551);
+ERROR:  duplicate key value violates unique constraint "title_unique_1"
+DETAIL:  Key (title)=(Letters from Earth) already exists.
+```
+
+При попытке добавить `'Letters from Earth', 551` получили ошибку что ключ `title` не уникален.
