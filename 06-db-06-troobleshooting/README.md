@@ -2,7 +2,7 @@
 
 # Домашняя работа
 
-## Урок 6.6. Troubleshooting"
+## Урок 6.6. Troubleshooting
 
 ## Задача 1
 

@@ -2,7 +2,7 @@
 
 # Домашняя работа
 
-## Урок 6.5. Elasticsearch"
+## Урок 6.5. Elasticsearch
 
 ## Задача 1
 
