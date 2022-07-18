@@ -1,19 +1,14 @@
-# Заменить на ID своего облака
-# https://console.cloud.yandex.ru/cloud?section=overview
 # Узнать командой: yc config list | grep cloud-id
 variable "yandex_cloud_id" {
-  default = "b1guptrv7v7c8mtp5kof"
+  default = "yandex_cloud_id"
 }
 
-# Заменить на Folder своего облака
-# https://console.cloud.yandex.ru/cloud?section=overview
 # Узнать командой: yc config list | grep folder-id
 variable "yandex_folder_id" {
-  default = "b1g9s0cv770m9p5ei3n1"
+  default = "yandex_folder_id"
 }
 
-# Заменить на ID своего образа
 # ID можно узнать с помощью команды yc compute image list --format yaml | grep -w id:
-variable "ubuntu-2004-lts" {
-  default = "fd8e1h16hdi8lcfnd6o3"
+variable "yandex_image_id" {
+  default = "yandex_image_id"
 }

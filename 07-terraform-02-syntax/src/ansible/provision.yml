@@ -8,6 +8,13 @@
       proxy_env:
         http_proxy: socks5://127.0.0.1:9050
         https_proxy: socks5://127.0.0.1:9050
+      yc_env:
+        yandex_token: "token"
+        yandex_zone: "zone"
+        yandex_cloud_id: "cloud-id"
+        yandex_folder_id: "folder-id"
+        yandex_image_id: "image-id"
+        yandex_service_acc: "service-acc"
 
     tasks:
       - name: Create directory for ssh-keys
@@ -15,6 +22,13 @@
 
       - name: Adding rsa-key in /root/.ssh/authorized_keys
         copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
+        ignore_errors: yes
+
+      - name: Adding rsa-key in /root/.ssh
+        command: "{{ item }}"
+        with_items:
+          - "rm -rf /root/.ssh"
+          - "ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa"
         ignore_errors: yes
 
       - name: Clear /etc/apt/apt.conf.d/01proxy file
@@ -61,7 +75,7 @@
         with_items:
           - "systemctl enable tor"
           - "systemctl start tor"
-          - "sleep 20"
+          - "sleep 30"
         environment: "{{ proxy_env }}"
         register: shell_output
 
@@ -89,6 +103,7 @@
           - terraform
           - packer
         environment: "{{ proxy_env }}"
+        timeout: 3600
 
       - name: Install Yandex Cloud
         command: "{{ item }}"
@@ -100,6 +115,7 @@
           - "sudo sed -i '$ a source /usr/local/completion.bash.inc' /etc/profile"
         args:
           chdir: "/opt/"
+        timeout: 3600
 
       - name: Terraform initialize
         command: "terraform init -force-copy"
@@ -107,44 +123,70 @@
           chdir: "/opt/terraform"
         environment: "{{ proxy_env }}"
 
-      # - name: Make multiple version of Terraform
-      #   block:
-      #     - name: Create directory to keep the Terraform binaries
-      #       file:
-      #         path: "{{ item }}"
-      #         state: directory
-      #         owner: root
-      #         group: root
-      #         mode: 0775
-      #       loop:
-      #         - "/usr/local/tf"
-      #         - "/usr/local/tf/12"
-      #         - "/usr/local/tf/13"
-      #
-      #     - name: Download the binaries for both the versions
-      #       block:
-      #         - name: Download and extract the binary for Terraform 0.12
-      #           command: "{{ item }}"
-      #           with_items:
-      #             - "curl https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip -o /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
-      #             - "unzip -o /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip -d /usr/local/tf/12/"
-      #             - "rm /usr/local/tf/12/terraform_0.12.20_linux_amd64.zip"
-      #           environment: "{{ proxy_env }}"
-      #
-      #         - name: Download and extract the binary for Terraform 0.13
-      #           command: "{{ item }}"
-      #           with_items:
-      #             - "curl https://releases.hashicorp.com/terraform/0.13.7/terraform_0.13.7_linux_amd64.zip -o /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip"
-      #             - "unzip -o /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip -d /usr/local/tf/13/"
-      #             - "rm /usr/local/tf/13/terraform_0.13.7_linux_amd64.zip"
-      #           environment: "{{ proxy_env }}"
-      #
-      #     - name: Create symlinks for both the Terraform versions in /usr/bin/ directory
-      #       command: "{{ item }}"
-      #       with_items:
-      #         - "rm -f /usr/bin/terraform12"
-      #         - "rm -f /usr/bin/terraform13"
-      #         - "ln -s /usr/local/tf/12/terraform /usr/bin/terraform12"
-      #         - "ln -s /usr/local/tf/13/terraform /usr/bin/terraform13"
-      #         - "chmod ugo+x /usr/bin/terraform12"
-      #         - "chmod ugo+x /usr/bin/terraform13"
+      - name: Yandex Cloud set profile
+        command: "{{ item }}"
+        with_items:
+          - "yc config profile create default"
+          - "yc config set folder-id {{ yandex_folder_id }}"
+          - "yc config set cloud-id {{ yandex_cloud_id }}"
+          - "yc config set token {{ yandex_token }}"
+          - "yc config set compute-default-zone {{ yandex_zone }}"
+          - "yc config profile activate default"
+        environment: "{{ yc_env }}"
+        ignore_errors: true
+        no_log: true
+
+      - name: Create Yandex Cloud service account
+        command: "yc iam service-account create --name {{ yandex_service_acc }}"
+        ignore_errors: true
+
+      - name: Create Yandex Cloud key.json
+        command: "{{ item }}"
+        with_items:
+          - "rm -rf key.json"
+          - "yc iam key create --service-account-name {{ yandex_service_acc }} --output key.json"
+          - "yc config set service-account-key key.json"
+        args:
+          chdir: "/opt/terraform"
+        ignore_errors: true
+
+      - name: Create image on the Yandex Cloud
+        command: "bash create_image.sh"
+        args:
+          chdir: "/opt/packer"
+        timeout: 3600
+
+      - name: Get image-id
+        command: "yc compute image list --format yaml"
+        register: image_id
+
+      - debug:
+          msg: "{{ image_id.stdout_lines[0]}}"
+
+      - name: Grep variable
+        shell:
+          cmd: "echo {{ image_id.stdout_lines[0]}} | awk '{print $3}'"
+        register: image_id
+
+      - name: Set variable yandex_image_id
+        set_fact:
+          yandex_image_id: "{{ image_id.stdout }}"
+
+      - debug:
+          msg: "{{ yandex_image_id }}"
+
+      - name: Create infrastructure
+        command: terraform apply -auto-approve \
+                                -var="yandex_folder_id={{ yandex_folder_id }}" \
+                                -var="yandex_cloud_id={{ yandex_cloud_id }}" \
+                                -var="yandex_image_id={{ yandex_image_id }}"
+        args:
+          chdir: "/opt/terraform"
+        environment: "{{ yc_env }}"
+        timeout: 3600
+
+      - name: Delete image on the Yandex Cloud
+        command: "bash erase.sh packer"
+        args:
+          chdir: "/opt/packer"
+        timeout: 3600

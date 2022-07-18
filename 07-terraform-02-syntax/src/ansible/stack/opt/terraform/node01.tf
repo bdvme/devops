@@ -11,7 +11,7 @@ resource "yandex_compute_instance" "node01" {
 
   boot_disk {
     initialize_params {
-      image_id    = "${var.ubuntu-2004-lts}"
+      image_id    = "${var.yandex_image_id}"
       name        = "root-node01"
       type        = "network-nvme"
       size        = "50"
