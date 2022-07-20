@@ -1,0 +1,16 @@
+---
+  - name: Installing tools
+    apt: >
+      package={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      - git
+      - unzip
+      - curl
+      - gnupg
+      - software-properties-common
+      - tor
+      - obfs4proxy
+      - jq
+      - ansible
