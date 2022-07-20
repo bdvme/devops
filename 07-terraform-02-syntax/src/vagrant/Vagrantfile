@@ -46,7 +46,8 @@ Vagrant.configure(2) do |config|
           yandex_zone: env['yandex_zone'],
           yandex_cloud_id: env['yandex_cloud_id'],
           yandex_folder_id: env['yandex_folder_id'],
-          yandex_service_acc: env['yandex_service_acc']
+          yandex_service_acc: env['yandex_service_acc'],
+          yandex_profile: env['yandex_profile']
         }
       end
     end

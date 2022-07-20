@@ -52,7 +52,7 @@ variable "GOLANG_VER" {
 
 variable "PULUMI_VER" {
   type = string
-  default = "3.33.2"
+  default = "3.36.0"
 }
 
 source "yandex" "yc-toolbox" {

@@ -14,7 +14,10 @@
         yandex_cloud_id: "cloud-id"
         yandex_folder_id: "folder-id"
         yandex_image_id: "image-id"
-        yandex_service_acc: "service-acc"
+        yandex_service_acc: "service_acc"
+        yandex_service_acc_id: "service_acc-id"
+        yandex_profile: "profile01"
+        yandex_external_ip_address: "127.0.0.1"
 
     tasks:
       - name: Create directory for ssh-keys
@@ -74,17 +77,26 @@
         command: "{{ item }}"
         with_items:
           - "systemctl enable tor"
-          - "systemctl start tor"
-          - "sleep 30"
         environment: "{{ proxy_env }}"
         register: shell_output
+
+      - name: Reboot host and wait for it to restart
+        reboot:
+          msg: "Reboot initiated by Ansible"
+          connect_timeout: 5
+          reboot_timeout: 600
+          pre_reboot_delay: 0
+          post_reboot_delay: 30
+          test_command: whoami
 
       - name: Checking IP
-        command: "curl ifconfig.me"
+        command: "{{ item }}"
+        with_items:
+          - "curl ifconfig.me"
         environment: "{{ proxy_env }}"
         register: shell_output
 
-      - debug: var=shell_output.stdout
+      - debug: "var=shell_output.stdout_lines"
 
       - name: Add HashiCorp GPG key
         shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
@@ -126,12 +138,12 @@
       - name: Yandex Cloud set profile
         command: "{{ item }}"
         with_items:
-          - "yc config profile create default"
+          - "yc config profile create {{ yandex_profile }}"
           - "yc config set folder-id {{ yandex_folder_id }}"
           - "yc config set cloud-id {{ yandex_cloud_id }}"
           - "yc config set token {{ yandex_token }}"
           - "yc config set compute-default-zone {{ yandex_zone }}"
-          - "yc config profile activate default"
+          - "yc config profile activate {{ yandex_profile }}"
         environment: "{{ yc_env }}"
         ignore_errors: true
         no_log: true
@@ -140,28 +152,46 @@
         command: "yc iam service-account create --name {{ yandex_service_acc }}"
         ignore_errors: true
 
+      - name: Get service_acc-id
+        command: "yc iam service-account get {{ yandex_service_acc }}"
+        register: service_acc
+
+      - name: Grep variable
+        shell:
+          cmd: "echo {{ service_acc.stdout_lines[0]}} | awk '{print $2}'"
+        register: service_acc
+
+      - name: Set variable yandex_service_acc_id
+        set_fact:
+          yandex_service_acc_id: "{{ service_acc.stdout }}"
+
+      - name: Set Editor role to Yandex Cloud service account
+        command: "yc resource-manager folder add-access-binding my-folder \
+         --role editor \
+         --subject serviceAccount:{{ yandex_service_acc_id }}"
+
       - name: Create Yandex Cloud key.json
         command: "{{ item }}"
         with_items:
           - "rm -rf key.json"
           - "yc iam key create --service-account-name {{ yandex_service_acc }} --output key.json"
           - "yc config set service-account-key key.json"
+          - "yc config set token {{ yandex_token }}"
         args:
           chdir: "/opt/terraform"
         ignore_errors: true
+        no_log: true
 
       - name: Create image on the Yandex Cloud
         command: "bash create_image.sh"
         args:
           chdir: "/opt/packer"
         timeout: 3600
+        ignore_errors: true
 
       - name: Get image-id
         command: "yc compute image list --format yaml"
         register: image_id
-
-      - debug:
-          msg: "{{ image_id.stdout_lines[0]}}"
 
       - name: Grep variable
         shell:
@@ -172,21 +202,42 @@
         set_fact:
           yandex_image_id: "{{ image_id.stdout }}"
 
-      - debug:
-          msg: "{{ yandex_image_id }}"
-
       - name: Create infrastructure
         command: terraform apply -auto-approve \
-                                -var="yandex_folder_id={{ yandex_folder_id }}" \
-                                -var="yandex_cloud_id={{ yandex_cloud_id }}" \
-                                -var="yandex_image_id={{ yandex_image_id }}"
+                               -var="yandex_folder_id={{ yandex_folder_id }}" \
+                               -var="yandex_cloud_id={{ yandex_cloud_id }}" \
+                               -var="yandex_image_id={{ yandex_image_id }}"
         args:
           chdir: "/opt/terraform"
         environment: "{{ yc_env }}"
         timeout: 3600
+        ignore_errors: true
 
-      - name: Delete image on the Yandex Cloud
-        command: "bash erase.sh packer"
+      - slurp:
+          path: "/opt/terraform/yc_external_ip.yml"
+        register: yc_external_ip
+
+      - name: Get external_ip
+        set_fact:
+          input: "{{ (yc_external_ip.content|b64decode|from_json).node01_netology_yc }}"
+
+      - debug:
+          msg: "{{ input }}"
+
+      - name: Set variable yandex_external_ip_address
+        set_fact:
+          yandex_external_ip_address: "{{ input }}"
+
+      - name: Ping yandex_external_ip_address
+        command: "{{ item }}"
+        with_items:
+          - "ping -c 20 {{ yandex_external_ip_address }}"
+
+      - name: Delete all on the Yandex Cloud
+        command: "{{ item }}"
+        with_items:
+          - "bash erase.sh packer"
+          - "bash erase.sh terraform"
         args:
           chdir: "/opt/packer"
         timeout: 3600
