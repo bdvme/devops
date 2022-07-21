@@ -1,0 +1,7 @@
+---
+  - name: Create image on the Yandex Cloud
+    command: "bash create_image.sh"
+    args:
+      chdir: "/opt/packer"
+    timeout: 3600
+    ignore_errors: true

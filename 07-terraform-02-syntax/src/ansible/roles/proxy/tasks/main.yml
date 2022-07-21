@@ -1,0 +1,12 @@
+---
+  - name: Clear /etc/apt/apt.conf.d/01proxy file
+    shell: "echo > /etc/apt/apt.conf.d/01proxy"
+
+  - name: Set default state /etc/apt/sources.list
+    copy:
+      src: stack/etc/apt/sources.list
+      dest: /etc/apt/
+      owner: root
+      group: root
+      mode: 0644
+    become: true    

@@ -1,0 +1,20 @@
+---
+  - slurp:
+      path: "/opt/terraform/yc_external_ip.yml"
+    register: yc_external_ip
+
+  - name: Get external_ip
+    set_fact:
+      input: "{{ (yc_external_ip.content|b64decode|from_json).node01_netology_yc }}"
+
+  - debug:
+      msg: "{{ input }}"
+
+  - name: Set variable yandex_external_ip_address
+    set_fact:
+      yandex_external_ip_address: "{{ input }}"
+
+  - name: Ping yandex_external_ip_address
+    command: "{{ item }}"
+    with_items:
+      - "ping -c 20 {{ yandex_external_ip_address }}"
