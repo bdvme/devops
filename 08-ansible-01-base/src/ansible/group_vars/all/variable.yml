@@ -1,13 +1,17 @@
-proxy_env:
-  http_proxy: socks5://127.0.0.1:9050
-  https_proxy: socks5://127.0.0.1:9050
-yc_env:
-  yandex_token: "token"
-  yandex_zone: "zone"
-  yandex_cloud_id: "cloud-id"
-  yandex_folder_id: "folder-id"
-  yandex_image_id: "image-id"
-  yandex_service_acc: "service_acc"
-  yandex_service_acc_id: "service_acc-id"
-  yandex_profile: "profile01"
-  yandex_external_ip_address: "127.0.0.1"
+#proxy_env:
+#  http_proxy: socks5://127.0.0.1:9050
+#  https_proxy: socks5://127.0.0.1:9050
+#yc_env:
+#  yandex_token: "token"
+#  yandex_zone: "zone"
+#  yandex_cloud_id: "cloud-id"
+#  yandex_folder_id: "folder-id"
+#  yandex_image_id: "image-id"
+#  yandex_service_acc: "service_acc"
+#  yandex_service_acc_id: "service_acc-id"
+#  yandex_profile: "profile01"
+#  yandex_external_ip_address: "127.0.0.1"
+
+  username: "some_user"
+  password: "some_password"
+  registry: "some_registry"

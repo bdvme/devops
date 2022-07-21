@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  centos:
+    build:
+      context: .
+      dockerfile: dockerfile_centos
+    container_name: centos7
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
+  ubuntu:
+    build:
+      context: .
+      dockerfile: dockerfile_ubuntu
+    container_name: ubuntu
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
