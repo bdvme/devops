@@ -347,3 +347,5 @@ ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    s
 ###### Ответ:
 
 * [08-ansible-01-base "Introduction to Ansible."](https://github.com/bdvme/devops/tree/main/08-ansible-01-base)
+
+* [08-ansible=01-base "Introduction to Ansible: selftest"](https://github.com/bdvme/devops/tree/main/08-ansible-01-base/playbook)
