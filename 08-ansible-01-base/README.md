@@ -47,7 +47,8 @@ vagrant@server1:/opt/playbook$ ansible-playbook -i ./inventory/test.yml ./site.y
 
 ...
 
-TASK [Print fact] ************************************************************************************************************************************************************************************************************************************************************
+TASK [Print fact]
+*****************************************************************
 ok: [localhost] => {
     "msg": 12
 }
@@ -123,25 +124,34 @@ apt -y install python3
 ```Bash
 vagrant ssh -c "ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml"
 
-PLAY [Print os facts] *****************************************************************
-TASK [Gathering Facts] *****************************************************************ok: [ubuntu]
+PLAY [Print os facts]
+*****************************************************************
+TASK [Gathering Facts]
+*****************************************************************
+ok: [ubuntu]
 ok: [centos7]
 
-TASK [Print OS] *****************************************************************ok: [centos7] => {
+TASK [Print OS]
+*****************************************************************
+ok: [centos7] => {
     "msg": "CentOS"
 }
 ok: [ubuntu] => {
     "msg": "Ubuntu"
 }
 
-TASK [Print fact] *****************************************************************ok: [centos7] => {
+TASK [Print fact]
+*****************************************************************
+ok: [centos7] => {
     "msg": "el"
 }
 ok: [ubuntu] => {
     "msg": "deb"
 }
 
-PLAY RECAP *****************************************************************centos7                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+PLAY RECAP
+*****************************************************************
+centos7                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
@@ -177,13 +187,16 @@ cat /opt/playbook/group_vars/el/examp.yml
 ```bash
 vagrant ssh -c "ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml"
 
-PLAY [Print os facts] *****************************************************************
+PLAY [Print os facts]
+*****************************************************************
 
-TASK [Gathering Facts] *****************************************************************
+TASK [Gathering Facts]
+*****************************************************************
 ok: [ubuntu]
 ok: [centos7]
 
-TASK [Print OS] *****************************************************************
+TASK [Print OS]
+*****************************************************************
 ok: [centos7] => {
     "msg": "CentOS"
 }
@@ -191,7 +204,8 @@ ok: [ubuntu] => {
     "msg": "Ubuntu"
 }
 
-TASK [Print fact] *****************************************************************
+TASK [Print fact]
+*****************************************************************
 ok: [ubuntu] => {
     "msg": "deb default fact"
 }
@@ -199,7 +213,8 @@ ok: [centos7] => {
     "msg": "el default fact"
 }
 
-PLAY RECAP *****************************************************************
+PLAY RECAP
+*****************************************************************
 centos7                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
@@ -246,13 +261,16 @@ $ANSIBLE_VAULT;1.1;AES256
 vagrant ssh -c "sudo ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml --ask-vault-pass"
 Vault password:
 
-PLAY [Print os facts] *****************************************************************
+PLAY [Print os facts]
+*****************************************************************
 
-TASK [Gathering Facts] *****************************************************************
+TASK [Gathering Facts]
+*****************************************************************
 ok: [ubuntu]
 ok: [centos7]
 
-TASK [Print OS] *****************************************************************
+TASK [Print OS]
+*****************************************************************
 ok: [centos7] => {
     "msg": "CentOS"
 }
@@ -260,7 +278,8 @@ ok: [ubuntu] => {
     "msg": "Ubuntu"
 }
 
-TASK [Print fact] *****************************************************************
+TASK [Print fact]
+*****************************************************************
 ok: [centos7] => {
     "msg": "el default fact"
 }
@@ -268,7 +287,8 @@ ok: [ubuntu] => {
     "msg": "deb default fact"
 }
 
-PLAY RECAP *****************************************************************
+PLAY RECAP
+*****************************************************************
 centos7                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
@@ -307,14 +327,17 @@ ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    s
 vagrant ssh -c "sudo ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml --ask-vault-pass"
 Vault password:
 
-PLAY [Print os facts] *****************************************************************
+PLAY [Print os facts]
+*****************************************************************
 
-TASK [Gathering Facts] *****************************************************************
+TASK [Gathering Facts]
+*****************************************************************
 ok: [localhost]
 ok: [ubuntu]
 ok: [centos7]
 
-TASK [Print OS] *****************************************************************
+TASK [Print OS]
+*****************************************************************
 ok: [localhost] => {
     "msg": "Ubuntu"
 }
@@ -325,7 +348,8 @@ ok: [ubuntu] => {
     "msg": "Ubuntu"
 }
 
-TASK [Print fact] *****************************************************************
+TASK [Print fact]
+*****************************************************************
 ok: [localhost] => {
     "msg": "local default fact"
 }
@@ -336,7 +360,8 @@ ok: [ubuntu] => {
     "msg": "deb default fact"
 }
 
-PLAY RECAP *****************************************************************
+PLAY RECAP
+*****************************************************************
 centos7                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
