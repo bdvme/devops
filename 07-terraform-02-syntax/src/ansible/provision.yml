@@ -5,13 +5,14 @@
     remote_user: vagrant
     roles:
       - ssh-keys
+      - proxy_unset
       - check_dns
-      - proxy
       - role: tools
         vars:
           tools_packages: ["python3", "python3-pip", "jq", "git", "wget", "curl", "unzip", "gnupg", "software-properties-common", "tor", "obfs4proxy", "ansible" ]
       - docker
       - sync
+      - proxy_set
       - tor
       - reboot
       - role: sleep
@@ -23,6 +24,7 @@
         vars:
           tools_packages: ["terraform", "packer"]
       - terraform_init
+      - proxy_unset
       - yc_init
       - yc_create_image
       - yc_create_infrastructure
