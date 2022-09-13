@@ -1,0 +1,9 @@
+---
+  - name: Delete all on the Yandex Cloud
+    command: "{{ item }}"
+    with_items:
+      - "bash erase.sh packer"
+      - "bash erase.sh terraform"
+    args:
+      chdir: "/opt/packer"
+    timeout: 3600

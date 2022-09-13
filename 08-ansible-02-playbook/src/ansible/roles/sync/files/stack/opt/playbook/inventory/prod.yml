@@ -1,0 +1,15 @@
+---
+clickhouse:
+  hosts:
+    clickhouse-01:
+      ansible_connection: docker
+      #ansible_host: 127.0.0.1
+      #ansible_port: 20011
+      #ansible_user: vagrant
+vector:
+  hosts:
+    vector-01:
+      ansible_connection: docker
+      #ansible_host: 127.0.0.1
+      #ansible_port: 20011
+      #ansible_user: vagrant

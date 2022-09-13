@@ -1,0 +1,31 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      - ssh-keys
+      - check_dns
+      #- proxy_unset
+      - role: tools
+        vars:
+          tools_packages: ["python3", "python3-pip", "jq", "git", "wget", "curl", "unzip", "gnupg", "software-properties-common", "tor", "obfs4proxy", "ansible", "ansible-lint" ]
+      - sync
+      - docker
+      - docker-compose
+      #- proxy_set
+      #- tor
+      #- reboot
+      #- role: sleep
+      #  vars:
+      #    count: "30"
+      #- check_ip
+      #- add_hashicorp
+      #- role: tools
+      #  vars:
+      #    tools_packages: ["terraform", "packer"]
+      #- proxy_unset
+      #- terraform_init
+      #- yc_init
+      #- yc_create_image
+      #- yc_create_infrastructure

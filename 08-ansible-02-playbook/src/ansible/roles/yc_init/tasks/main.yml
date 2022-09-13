@@ -1,0 +1,59 @@
+---
+  - name: Install Yandex Cloud
+    command: "{{ item }}"
+    with_items:
+      - "curl -s -O https://storage.yandexcloud.net/yandexcloud-yc/install.sh"
+      - "chmod u+x install.sh"
+      - "sudo ./install.sh -a -i /usr/local/ 2>/dev/null"
+      - "rm -rf install.sh"
+      - "sudo sed -i '$ a source /usr/local/completion.bash.inc' /etc/profile"
+    args:
+      chdir: "/opt/"
+    timeout: 36000
+
+  - name: Yandex Cloud set profile
+    command: "{{ item }}"
+    with_items:
+      - "yc config profile create {{ yandex_profile }}"
+      - "yc config set folder-id {{ yandex_folder_id }}"
+      - "yc config set cloud-id {{ yandex_cloud_id }}"
+      - "yc config set token {{ yandex_token }}"
+      - "yc config set compute-default-zone {{ yandex_zone }}"
+      - "yc config profile activate {{ yandex_profile }}"
+    environment: "{{ yc_env }}"
+    ignore_errors: true
+    no_log: true
+
+  - name: Create Yandex Cloud service account
+    command: "yc iam service-account create --name {{ yandex_service_acc }}"
+    ignore_errors: true
+
+  - name: Get service_acc-id
+    command: "yc iam service-account get {{ yandex_service_acc }}"
+    register: service_acc
+
+  - name: Grep variable
+    shell:
+      cmd: "echo {{ service_acc.stdout_lines[0]}} | awk '{print $2}'"
+    register: service_acc
+
+  - name: Set variable yandex_service_acc_id
+    set_fact:
+      yandex_service_acc_id: "{{ service_acc.stdout }}"
+
+  - name: Set Editor role to Yandex Cloud service account
+    command: "yc resource-manager folder add-access-binding my-folder \
+     --role editor \
+     --subject serviceAccount:{{ yandex_service_acc_id }}"
+
+  - name: Create Yandex Cloud key.json
+    command: "{{ item }}"
+    with_items:
+      - "rm -rf key.json"
+      - "yc iam key create --service-account-name {{ yandex_service_acc }} --output key.json"
+      - "yc config set service-account-key key.json"
+      - "yc config set token {{ yandex_token }}"
+    args:
+      chdir: "/opt/terraform"
+    ignore_errors: true
+    no_log: true

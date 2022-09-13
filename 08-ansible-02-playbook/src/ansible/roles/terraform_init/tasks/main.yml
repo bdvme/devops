@@ -1,0 +1,6 @@
+---
+  - name: Terraform initialize
+    command: "terraform init -force-copy"
+    args:
+      chdir: "/opt/terraform"
+    environment: "{{ proxy_env }}"

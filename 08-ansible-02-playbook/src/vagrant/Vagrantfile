@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+
+ISO = "bento/ubuntu-20.04"
+NET = "192.168.99."
+DOMAIN = ".netology"
+HOST_PREFIX = "server"
+INVENTORY_PATH = "../ansible/inventory"
+
+servers = [
+  {
+    :hostname => HOST_PREFIX + "2" + DOMAIN,
+    :ip => NET + "12",
+    :ssh_host => "20012",
+    :ssh_vm => "22",
+    :ram => 1024,
+    :core => 1
+  }
+]
+
+env = {}
+File.read(".env").split("\n").each do |ef|
+  env[ef.split("=")[0]] = ef.split("=")[1]
+end
+
+Vagrant.configure(2) do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = ISO
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip]
+      node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+      node.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+        vb.customize ["modifyvm", :id, "--cpus", machine[:core]]
+        vb.name = machine[:hostname]
+      end
+      node.vm.provision "ansible" do |setup|
+        setup.inventory_path = INVENTORY_PATH
+        setup.playbook = "../ansible/provision.yml"
+        setup.become = true
+        #setup.verbose = "true"
+        setup.extra_vars = {
+          ansible_user: 'vagrant',
+          yandex_token: env['yandex_token'],
+          yandex_zone: env['yandex_zone'],
+          yandex_cloud_id: env['yandex_cloud_id'],
+          yandex_folder_id: env['yandex_folder_id'],
+          yandex_service_acc: env['yandex_service_acc'],
+          yandex_profile: env['yandex_profile'],
+          registry: env['docker_registry'],
+          username: env['docker_username'],
+          password: env['docker_password']
+        }
+      end
+    end
+  end
+end
