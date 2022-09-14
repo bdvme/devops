@@ -1,3 +1,0 @@
----
-  - name: Checking DNS
-    command: host -t A google.com

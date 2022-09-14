@@ -1,0 +1,3 @@
+---
+  - name: Run ansible-playbook
+    command: ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml

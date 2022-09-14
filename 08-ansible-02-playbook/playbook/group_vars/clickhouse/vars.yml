@@ -1,6 +1,5 @@
 ---
 clickhouse_version: "22.3.3.4"
-clickhouse_package_architecture: x86_64
 clickhouse_packages:
   - clickhouse-client
   - clickhouse-server

@@ -1,8 +1,0 @@
----
-  - name: Installing tools
-    apt: >
-      package={{ item }}
-      state=present
-      update_cache=yes
-    with_items:
-      "{{ tools_packages }}"

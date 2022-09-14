@@ -1,9 +1,0 @@
----
-  - name: Synchronization
-    copy:
-      src: stack/
-      dest: "/"
-      owner: root
-      group: root
-      mode: 0644
-    become: true

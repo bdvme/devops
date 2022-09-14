@@ -7,7 +7,11 @@ services:
     container_name: clickhouse-01
     stdin_open: true
     tty: true
-    entrypoint: /bin/bash
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    entrypoint: ["/usr/sbin/init"]
+
   vector:
     build:
       context: .
@@ -15,4 +19,7 @@ services:
     container_name: vector-01
     stdin_open: true
     tty: true
-    entrypoint: /bin/bash
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    entrypoint: ["/usr/sbin/init"]

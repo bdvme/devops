@@ -2,11 +2,7 @@
 - name: Install Clickhouse
   hosts: clickhouse
   handlers:
-    - name: Start clickhouse service
-      become: true
-      ansible.builtin.service:
-        name: clickhouse-server
-        state: started
+
   tasks:
     - block:
         - name: Get clickhouse distrib
@@ -26,13 +22,21 @@
           - clickhouse-common-static-{{ clickhouse_version }}.rpm
           - clickhouse-client-{{ clickhouse_version }}.rpm
           - clickhouse-server-{{ clickhouse_version }}.rpm
-      notify: Start clickhouse service
+    - name: Start clickhouse service
+      become: true
+      ansible.builtin.service:
+        name: clickhouse-server
+        state: restarted
+    - name: Verify clickhouse-server is listening on 9000
+      wait_for:
+        port: 9000
+        delay: 5
+        timeout: 300
     - name: Create database
-      ansible.builtin.command:
-        cmd: clickhouse-client -q 'create database logs;'
+      command: clickhouse-client -q 'create database logs;'
       register: create_db
-      failed_when: create_db.rc != 0 and create_db.rc !=82
-      changed_when: create_db.rc == 0
+      failed_when: create_db.rc | default('') != 0 and create_db.rc | default('') !=82
+      changed_when: create_db.rc | default('') == 0
 - name: Install Vector
   hosts: vector
   handlers:
@@ -40,7 +44,7 @@
       become: true
       ansible.builtin.service:
         name: vector
-        state: started
+        state: restarted
   tasks:
     - name: Get vector distrib
       ansible.builtin.get_url:
