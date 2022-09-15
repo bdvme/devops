@@ -32,3 +32,4 @@
 * [07-terraform-01-intro "Infrastructure as code"](https://github.com/bdvme/devops/tree/main/07-terraform-01-intro)
 * [07-terraform-02-syntax "Cloud providers and Terraform syntax."](https://github.com/bdvme/devops/tree/main/07-terraform-02-syntax)
 * [08-ansible-01-base "Introduction to Ansible."](https://github.com/bdvme/devops/tree/main/08-ansible-01-base)
+* [08-ansible-02-playbook "Work with Ansible playbook."](https://github.com/bdvme/devops/tree/main/08-ansible-02-playbook)

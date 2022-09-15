@@ -39,4 +39,7 @@ override.tf.json
 # Yandex Cloud credentials
 key.json
 .env
+
+#vagrant
+
 .vagrant

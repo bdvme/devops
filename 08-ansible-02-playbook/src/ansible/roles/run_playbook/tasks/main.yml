@@ -1,3 +1,5 @@
 ---
   - name: Run ansible-playbook
-    command: ansible-playbook -i /opt/playbook/inventory/prod.yml /opt/playbook/site.yml
+    command: ansible-playbook -i ./inventory/prod.yml site.yml
+    args:
+      chdir: /opt/playbook

@@ -27,6 +27,7 @@
 ###### Ответы:
 
 Установку clickhouse и vector делал с помощью Vagrant, Ansible, Docker.
+в playbook `./src/ansible/provision.yml` содержатся задачи для развертывания ВМ.
 
 1. Приготовьте свой собственный inventory файл `prod.yml`.
 
@@ -113,3 +114,17 @@ vector:
 ```
 
 </details>
+
+* Задания с 3 по 8 Выполнил.
+
+9. Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
+
+###### Ответ:
+
+Playbook устанавливает пакеты `clickhouse` и `vector` на 2 хоста описаные в файле `inventory\prod.yml`. В playbook есть handler, который выполняется в самом конце playbook и стартует сервис vector. Также в playbook есть задача, которая проверяет каждые 5 секунд начал сервис clickhouse слушать 9000 порт или нет, таймаут 300 секунд.
+
+10. Готовый playbook выложите в свой репозиторий, поставьте тег `08-ansible-02-playbook` на фиксирующий коммит, в ответ предоставьте ссылку на него.
+
+###### Ответ:
+
+https://github.com/bdvme/devops/blob/main/08-ansible-02-playbook/playbook/site.yml

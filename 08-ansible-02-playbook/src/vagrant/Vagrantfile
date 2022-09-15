@@ -8,12 +8,24 @@ INVENTORY_PATH = "../ansible/inventory"
 
 servers = [
   {
+    :hostname => HOST_PREFIX + "1" + DOMAIN,
+    :ip => NET + "11",
+    :ssh_host => "20011",
+    :ssh_vm => "22",
+    :ram => 1024,
+    :core => 1,
+    :tags => "yc",
+    :verbose => "false"
+  },
+  {
     :hostname => HOST_PREFIX + "2" + DOMAIN,
     :ip => NET + "12",
     :ssh_host => "20012",
     :ssh_vm => "22",
     :ram => 1024,
-    :core => 1
+    :core => 1,
+    :tags => "docker",
+    :verbose => "false"
   }
 ]
 
@@ -38,10 +50,9 @@ Vagrant.configure(2) do |config|
       node.vm.provision "ansible" do |setup|
         setup.inventory_path = INVENTORY_PATH
         setup.playbook = "../ansible/provision.yml"
-        setup.tags="docker"
-        #setup.tags="yc"
+        setup.tags=machine[:tags]
         setup.become = true
-        #setup.verbose = "true"
+        setup.verbose = machine[:verbose]
         setup.extra_vars = {
           ansible_user: 'vagrant',
           yandex_token: env['yandex_token'],

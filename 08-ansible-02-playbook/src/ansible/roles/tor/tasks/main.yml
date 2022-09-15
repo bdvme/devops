@@ -1,7 +1,5 @@
 ---
   - name: Enable Tor network
-    command: "{{ item }}"
-    with_items:
-      - "systemctl enable tor"
-    environment: "{{ proxy_env }}"
-    register: shell_output
+    service:
+      name: tor
+      enabled: yes

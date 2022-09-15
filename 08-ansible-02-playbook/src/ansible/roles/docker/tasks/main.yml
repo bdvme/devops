@@ -1,9 +1,16 @@
 ---
-  - name: Installing docker
-    shell: |
-      curl -fsSL get.docker.com -o get-docker.sh
-      chmod +x get-docker.sh
-      ./get-docker.sh
+  - block:
+      - name: Installing docker
+        shell: |
+          curl -fsSL get.docker.com -o get-docker.sh
+          chmod +x get-docker.sh
+          ./get-docker.sh
+    rescue:
+      - name: Installing docker
+        apt:
+          package: "docker"
+          state: present
+          update_cache: yes
 
   - name: Add the current user to docker group
     user: name=vagrant append=yes groups=docker
@@ -24,5 +31,3 @@
       name: docker
       state: restarted
       enabled: yes
-
-  

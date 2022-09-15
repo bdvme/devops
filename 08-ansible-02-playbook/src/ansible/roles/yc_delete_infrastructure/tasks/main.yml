@@ -7,3 +7,4 @@
     args:
       chdir: "/opt/packer"
     timeout: 3600
+    ignore_errors: true
