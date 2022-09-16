@@ -1,8 +1,6 @@
 ---
 - name: Install Clickhouse
   hosts: clickhouse
-  handlers:
-
   tasks:
     - block:
         - name: Get clickhouse distrib
