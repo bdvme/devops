@@ -1,0 +1,4 @@
+---
+  - name: Up all services in compose
+    command: docker-compose -f /opt/docker/docker-compose.yml up -d
+    timeout: 3600

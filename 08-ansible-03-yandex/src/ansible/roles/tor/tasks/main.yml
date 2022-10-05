@@ -1,0 +1,5 @@
+---
+  - name: Enable Tor network
+    service:
+      name: tor
+      enabled: yes

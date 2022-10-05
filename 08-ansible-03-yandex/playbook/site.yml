@@ -1,0 +1,102 @@
+---
+- name: Install Clickhouse
+  hosts: clickhouse
+  become: true
+  tasks:
+    - block:
+        - name: Get clickhouse distrib
+          get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.noarch.rpm"
+            dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
+          with_items: "{{ clickhouse_packages }}"
+      rescue:
+        - name: Get clickhouse distrib
+          get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
+            dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+    - name: Install clickhouse packages
+      yum:
+        name:
+          - clickhouse-common-static-{{ clickhouse_version }}.rpm
+          - clickhouse-client-{{ clickhouse_version }}.rpm
+          - clickhouse-server-{{ clickhouse_version }}.rpm
+    - name: Replace clickhouse config
+      template:
+        src: config.xml.j2
+        dest: /etc/clickhouse-server/config.xml
+
+    - name: Start clickhouse service
+      service:
+        name: clickhouse-server
+        state: restarted
+    - name: Verify clickhouse-server is listening on 9000
+      wait_for:
+        port: 9000
+        delay: 5
+        timeout: 300
+    - name: Create database
+      command: clickhouse-client -q 'create database logs;'
+      register: create_db
+      failed_when: create_db.rc | default('') != 0 and create_db.rc | default('') !=82
+      changed_when: create_db.rc | default('') == 0
+
+- name: Install Vector
+  hosts: vector
+  become: true
+  handlers:
+    - name: Start vector service
+      service:
+        name: vector
+        state: restarted
+  tasks:
+    - name: Get vector distrib
+      get_url:
+        url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-1.x86_64.rpm"
+        dest: "./vector-{{ vector_version }}-1.x86_64.rpm"
+    - name: Install vector package
+      yum:
+        name:
+          - vector-{{ vector_version }}-1.x86_64.rpm
+      notify: Start vector service
+
+- name: Install Lighthouse
+  hosts: lighthouse
+  become: true
+  tasks:
+    - name: Create home directory for www
+      file:
+        path: {{ lighthouse_dir }}
+        state: directory
+    - name: Get lighthouse distrib
+      git:
+        repo: "{{ lighthouse_repo }}"
+        version: master
+        dest: "{{ lighthouse_dir }}"
+
+- name: Setup nginx
+  hosts: lighthouse
+  become: true
+  handlers:
+    - name: nginx start
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+  tasks:
+    - name: Replace nginx.conf
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: Add virtual domain in NGINX for CentOS
+      template:
+        src: lighthouse.conf.j2
+        dest: /etc/nginx/conf.d/{{ virtual_domain }}.conf
+
+    - name: Disable SELinux
+      shell: |
+        setenforce 0
+        chown -R {{ nginx_user }}:{{ nginx_user }} {{ lighthouse_dir }}
+
+      notify:
+        - nginx start

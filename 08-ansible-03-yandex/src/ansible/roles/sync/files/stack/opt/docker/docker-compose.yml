@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  clickhouse:
+    build:
+      context: .
+      dockerfile: dockerfile_clickhouse
+    container_name: clickhouse-01
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    entrypoint: ["/usr/sbin/init"]
+
+  vector:
+    build:
+      context: .
+      dockerfile: dockerfile_vector
+    container_name: vector-01
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    entrypoint: ["/usr/sbin/init"]
