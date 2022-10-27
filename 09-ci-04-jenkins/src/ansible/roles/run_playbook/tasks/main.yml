@@ -1,0 +1,5 @@
+---
+  - name: Run ansible-playbook
+    command: ansible-playbook -i ./inventory/cicd/hosts.yml site.yml
+    args:
+      chdir: "/opt/infrastructure"
