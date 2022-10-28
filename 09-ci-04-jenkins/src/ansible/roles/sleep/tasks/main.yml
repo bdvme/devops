@@ -1,3 +1,0 @@
----
-  - name: Sleep
-    command: sleep "{{ count }}"

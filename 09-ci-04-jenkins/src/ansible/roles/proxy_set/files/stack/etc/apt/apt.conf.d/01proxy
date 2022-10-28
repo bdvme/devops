@@ -1,3 +1,0 @@
-Acquire::http::proxy "socks5h://127.0.0.1:9050/";
-Acquire::ftp::proxy "socks5h://127.0.0.1:9050/";
-Acquire::https::proxy "socks5h://127.0.0.1:9050/";

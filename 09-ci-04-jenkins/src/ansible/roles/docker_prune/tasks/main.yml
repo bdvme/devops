@@ -1,4 +1,0 @@
----
-  - name: Docker system prune
-    command: docker system prune -f
-    ignore_errors: true

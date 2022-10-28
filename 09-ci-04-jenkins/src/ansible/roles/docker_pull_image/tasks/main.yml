@@ -1,8 +1,0 @@
----
-  - name: Pull an image
-    docker_image:
-      name: "{{ image }}"
-      source: pull
-    # Select platform for pulling. If not specified, will pull whatever docker prefers.
-      pull:
-        platform: amd64

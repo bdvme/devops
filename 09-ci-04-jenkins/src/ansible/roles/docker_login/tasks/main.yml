@@ -1,6 +1,0 @@
----
-  - name: Docker login
-    docker_login:
-      registry: "{{ registry }}"
-      username: "{{ username }}"
-      password: "{{ password }}"

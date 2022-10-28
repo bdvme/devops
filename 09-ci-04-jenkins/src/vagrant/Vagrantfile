@@ -63,7 +63,7 @@ Vagrant.configure(2) do |config|
         setup.playbook = "../ansible/provision.yml"
         setup.tags=machine[:tags]
         setup.become = true
-        setup.verbose = machine[:verbose]
+        #setup.verbose = machine[:verbose]
         setup.extra_vars = {
           ansible_user: 'vagrant',
           yandex_token: env['yandex_token'],
