@@ -1,0 +1,17 @@
+server {
+    listen       80;
+    server_name  {{ virtual_domain }};
+    root {{ lighthouse_dir }};
+    index index.php index.html index.htm;
+
+    access_log /var/log/nginx/{{ virtual_domain }}_access_log;
+    error_log /var/log/nginx/{{ virtual_domain }}_error_log;
+
+    location / {
+
+    }
+
+    location ~* ^.+\.(jpg|jpeg|gif|png|css|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|exe|pdf|ppt|tar|wav|bmp|rtf|js)$ {
+            expires modified +1w;
+    }
+}

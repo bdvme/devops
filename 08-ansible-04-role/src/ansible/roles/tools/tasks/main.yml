@@ -1,0 +1,12 @@
+---
+  - name: Installing tools
+    yum: >
+      name={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      "{{ tools_packages }}"
+
+  - name: Disable SELinux
+    shell: |
+      setenforce 0

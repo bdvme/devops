@@ -1,0 +1,6 @@
+---
+# handlers file for vector
+- name: Start vector service
+  service:
+    name: vector
+    state: restarted

@@ -1,0 +1,24 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      - { role: ssh-keys, tags: "always" }
+      - { role: tools, vars: { tools_packages: ["epel-release",
+                                                "bind-utils",
+                                                "python3",
+                                                "python3-pip",
+                                                "python-pip",                                              
+                                                "python-setuptools",
+                                                "python3-setuptools",
+                                                "git",
+                                                "wget",
+                                                "curl",
+                                                "unzip",
+                                                "gnupg"
+                                              ] }, tags: ["always"] }
+      - { role: tools, vars: { tools_packages: ["ansible", "ansible-lint" ] }, tags: ["master"] }
+      - { role: check_dns, tags: "always" }
+      - { role: sync, tags: "master" }
+      - { role: run_playbook, tags: "master" }

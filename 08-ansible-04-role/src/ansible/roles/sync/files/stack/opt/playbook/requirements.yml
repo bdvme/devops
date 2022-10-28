@@ -1,0 +1,15 @@
+---
+  - src: git@github.com:bdvme/08-ansible-04-role/repo_roles/clickhouse-role.git
+    scm: git
+    version: "1.11.0"
+    name: clickhouse
+
+  - src: git@github.com:bdvme/08-ansible-04-role/repo_roles/lighthouse-role.git
+    scm: git
+    version: "1.11.0"
+    name: lighthouse
+
+  - src: git@github.com:bdvme/08-ansible-04-role/repo_roles/vector-role.git
+    scm: git
+    version: "0.22.0"
+    name: vector

@@ -1,0 +1,21 @@
+---
+all:
+  hosts:
+    clk-instance:
+      ansible_host: clickhouse-01.ip
+    vct-instance:
+      ansible_host: vector-01.ip
+    lght-instance:
+      ansible_host: lighthouse-01.ip
+  vars:
+    ansible_connection: ssh
+    ansible_user: centos
+clickhouse:
+  hosts:
+    clk-instance:
+vector:
+  hosts:
+    vct-instance:
+lighthouse:
+  hosts:
+    lght-instance:

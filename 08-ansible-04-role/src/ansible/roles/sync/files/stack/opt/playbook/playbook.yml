@@ -1,0 +1,27 @@
+---
+- name: Get IPs
+  hosts: all
+  pre_tasks:
+    - name: Collect hosts' IP-adresses
+      ansible.builtin.setup:
+        filter:
+          - default_ipv4
+      tags: always
+
+- name: Install clickhouse
+  hosts: clickhouse
+  roles:
+    - clickhouse
+  tags: clickhouse
+
+- name: Install vector
+  hosts: vector
+  roles:
+    - vector
+  tags: vector
+
+- name: Install lighthouse
+  hosts: lighthouse
+  roles:
+    - lighthouse
+  tags: lighthouse

@@ -1,0 +1,9 @@
+---
+  - name: Run requirements.yml
+    command: ansible-galaxy install -r requirements.yml
+    args:
+      chdir: "/opt/playbook"
+  - name: Run ansible-playbook
+    command: ansible-playbook -i ./inventory/prod.yml playbook.yml
+    args:
+      chdir: "/opt/playbook"

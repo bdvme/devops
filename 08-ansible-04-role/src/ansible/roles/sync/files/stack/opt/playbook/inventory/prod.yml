@@ -1,0 +1,27 @@
+---
+all:
+  hosts:
+    clk-instance:
+      ansible_host: 192.168.99.11
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    vct-instance:
+      ansible_host: 192.168.99.12
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    lght-instance:
+      ansible_host: 192.168.99.13
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+  vars:
+    ansible_connection: ssh
+    ansible_user: centos
+clickhouse:
+  hosts:
+    clk-instance:
+vector:
+  hosts:
+    vct-instance:
+lighthouse:
+  hosts:
+    lght-instance:
