@@ -1,7 +1,0 @@
----
-# handlers file for lighthouse
-  - name: nginx start
-    service:
-      name: nginx
-      state: started
-      enabled: yes

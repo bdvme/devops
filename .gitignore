@@ -46,3 +46,5 @@ key.json
 
 #sonarqube
 .scannerwork
+
+.DS_Store

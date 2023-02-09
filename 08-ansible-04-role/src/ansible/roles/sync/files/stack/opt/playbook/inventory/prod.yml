@@ -2,20 +2,20 @@
 all:
   hosts:
     clk-instance:
-      ansible_host: 192.168.99.11
+      ansible_host: 192.168.99.101
       ssh_key_info:
         ssh_public_key: "~/.ssh/id_rsa.pub"
     vct-instance:
-      ansible_host: 192.168.99.12
+      ansible_host: 192.168.99.102
       ssh_key_info:
         ssh_public_key: "~/.ssh/id_rsa.pub"
     lght-instance:
-      ansible_host: 192.168.99.13
+      ansible_host: 192.168.99.103
       ssh_key_info:
         ssh_public_key: "~/.ssh/id_rsa.pub"
   vars:
     ansible_connection: ssh
-    ansible_user: centos
+    ansible_user: vagrant
 clickhouse:
   hosts:
     clk-instance:

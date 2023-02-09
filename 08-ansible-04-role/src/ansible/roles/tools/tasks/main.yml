@@ -6,6 +6,7 @@
       update_cache=yes
     with_items:
       "{{ tools_packages }}"
+    become: yes
 
   - name: Disable SELinux
     shell: |

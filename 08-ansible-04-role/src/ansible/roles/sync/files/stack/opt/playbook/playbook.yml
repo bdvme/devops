@@ -1,27 +1,38 @@
 ---
-- name: Get IPs
-  hosts: all
-  pre_tasks:
-    - name: Collect hosts' IP-adresses
-      ansible.builtin.setup:
-        filter:
-          - default_ipv4
-      tags: always
-
 - name: Install clickhouse
   hosts: clickhouse
+  become: yes
+  become_user: root
+  remote_user: vagrant
   roles:
-    - clickhouse
+    - { role: clickhouse, vars: { clickhouse_listen_host_custom: "{{ hostvars['clk-instance']['ansible_host'] }}", "127.0.0.1" } }
+  handlers:
+    - name: Clickhouse-server restart
+      service:
+        name: clickhouse-server
+        state: restarted
+  tasks:
+    - name: Create clickhouse database
+      command: "clickhouse-client -q 'CREATE DATABASE IF NOT EXISTS logs;'"
+    - name: Create clickhouse table
+      command: "clickhouse-client -q 'CREATE TABLE IF NOT EXISTS  logs.logs (message String) ENGINE = MergeTree() ORDER BY tuple();'"
+      notify: "Clickhouse-server restart"
   tags: clickhouse
 
 - name: Install vector
   hosts: vector
+  become: yes
+  become_user: root
+  remote_user: vagrant
   roles:
     - vector
   tags: vector
 
 - name: Install lighthouse
   hosts: lighthouse
+  become: yes
+  become_user: root
+  remote_user: vagrant
   roles:
     - lighthouse
   tags: lighthouse

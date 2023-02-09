@@ -5,18 +5,19 @@
     remote_user: vagrant
     roles:
       - { role: ssh-keys, tags: "always" }
-      - { role: tools, vars: { tools_packages: ["epel-release",
-                                                "bind-utils",
+      - { role: tools, vars: { tools_packages: "epel-release" }, tags: ["always"] }
+      - { role: tools, vars: { tools_packages: ["bind-utils",
                                                 "python3",
                                                 "python3-pip",
-                                                "python-pip",                                              
+                                                "python-pip",
                                                 "python-setuptools",
                                                 "python3-setuptools",
                                                 "git",
                                                 "wget",
                                                 "curl",
                                                 "unzip",
-                                                "gnupg"
+                                                "gnupg",
+                                                "nginx"
                                               ] }, tags: ["always"] }
       - { role: tools, vars: { tools_packages: ["ansible", "ansible-lint" ] }, tags: ["master"] }
       - { role: check_dns, tags: "always" }

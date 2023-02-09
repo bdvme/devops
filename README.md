@@ -34,6 +34,7 @@
 * [08-ansible-01-base "Introduction to Ansible."](https://github.com/bdvme/devops/tree/main/08-ansible-01-base)
 * [08-ansible-02-playbook "Work with Ansible playbook."](https://github.com/bdvme/devops/tree/main/08-ansible-02-playbook)
 * [08-ansible-03-yandex "Work with YandexCloud."](https://github.com/bdvme/devops/tree/main/08-ansible-03-yandex)
+* [08-ansible-04-role "Work with roles."](https://github.com/bdvme/devops/tree/main/08-ansible-04-role)
 * [09-ci-01-intro "Software life cycle."](https://github.com/bdvme/devops/tree/main/09-ci-01-intro)
 * [09-ci-02-devops "DevOps and SRE."](https://github.com/bdvme/devops/tree/main/09-ci-02-devops)
 * [09-ci-03-cicd "CI/CD."](https://github.com/bdvme/devops/tree/main/09-ci-03-cicd)

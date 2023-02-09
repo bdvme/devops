@@ -1,6 +1,7 @@
 ---
   - name: Run requirements.yml
-    command: ansible-galaxy install -r requirements.yml
+    become: yes
+    command: ansible-galaxy install -f -r requirements.yml --roles-path roles --ignore-errors
     args:
       chdir: "/opt/playbook"
   - name: Run ansible-playbook
