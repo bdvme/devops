@@ -1,0 +1,25 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      - { role: ssh-keys, tags: "always" }
+      - { role: sync, tags: "always" }
+      - { role: tools_apt, vars: { tools_packages: ["python3",
+                                                    "python3-pip",
+                                                    "python3-setuptools",
+                                                    "git",
+                                                    "wget",
+                                                    "curl",
+                                                    "unzip",
+                                                    "gnupg",
+                                                    "ansible",
+                                                    "ansible-lint"
+                                                    ] }, tags: ["always"] }
+      - { role: tools_pip, tags: "always" }
+      - { role: check_dns, tags: "always" }
+      - { role: docker, tags: "always" }
+      - { role: docker_pull_image, vars: { image: "aragast/netology:latest" }, tags: "always" }
+      - { role: run_requirements, tags: "always" }
+      - { role: sync_tests, tags: "always" }

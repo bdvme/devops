@@ -1,0 +1,9 @@
+---
+  - name: Synchronization
+    copy:
+      src: stack/opt/tests/
+      dest: "/opt/playbook/"
+      owner: root
+      group: root
+      mode: 0644
+    become: true

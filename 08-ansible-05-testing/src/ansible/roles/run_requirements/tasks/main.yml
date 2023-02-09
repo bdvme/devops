@@ -1,0 +1,10 @@
+- name: Run roles requirements.yml
+  become: yes
+  command: ansible-galaxy install -f -r ./roles/requirements.yml --roles-path roles --ignore-errors
+  args:
+    chdir: "/opt/playbook"
+- name: Run collection requirements.yml
+  become: yes
+  command: ansible-galaxy collection install -r ./collection/requirements.yml
+  args:
+    chdir: "/opt/playbook"

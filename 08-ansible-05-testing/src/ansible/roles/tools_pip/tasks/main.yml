@@ -1,0 +1,4 @@
+---
+  - name: Installing tools
+    pip:
+      requirements: /opt/python/requirements.txt
