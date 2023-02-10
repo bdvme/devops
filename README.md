@@ -39,3 +39,4 @@
 * [09-ci-01-intro "Software life cycle."](https://github.com/bdvme/devops/tree/main/09-ci-01-intro)
 * [09-ci-02-devops "DevOps and SRE."](https://github.com/bdvme/devops/tree/main/09-ci-02-devops)
 * [09-ci-03-cicd "CI/CD."](https://github.com/bdvme/devops/tree/main/09-ci-03-cicd)
+* [10-monitoring-01-base "Why and what to monitoring"](https://github.com/bdvme/devops/tree/main/10-monitoring-01-base)
