@@ -1,0 +1,79 @@
+---
+
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    tasks:
+      - name: Create directory for ssh-keys
+        file: state=directory mode=0700 dest=/root/.ssh/
+
+      - name: Adding rsa-key in /root/.ssh/authorized_keys
+        copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
+        ignore_errors: yes
+
+      - name: Add Docker GPG apt Key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+      - name: Add Docker Repository
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu focal stable
+          state: present
+
+      - name: Update apt and install docker-ce
+        apt: update_cache=yes name=docker-ce state=latest
+
+      - name: Installing tools
+        apt:
+          package: "{{ item }}"
+          state: present
+          update_cache: yes
+        with_items:
+          - git
+          - curl
+          - python3
+          - python3-pip
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+          - xdg-utils
+
+      - name: Install Docker Module for Python
+        pip:
+          name: docker
+
+      - name: Start docker service
+        service:
+          name: docker
+          state: restarted
+          enabled: yes
+
+      - name: Add the current user to docker group
+        user: name=vagrant append=yes groups=docker
+
+      - name: Synchronization
+        copy:
+          src: stack/
+          dest: "/opt"
+          owner: root
+          group: root
+          mode: 0644
+        become: true
+
+    #  - name: Pull all images in compose
+    #    command: docker-compose -f /opt/stack/docker-compose.yml pull
+
+      - name: Set permission
+        shell: |
+          chmod +x /opt/sandbox/sandbox
+          chmod +x /opt/sandbox/documentation/builds/documentation
+          chmod 666 /var/run/docker.sock
+        
+      - name: Up all services
+        command: ./sandbox up
+        args:
+          chdir: "/opt/sandbox"
+        ignore_errors: yes
