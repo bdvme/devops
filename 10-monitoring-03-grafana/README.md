@@ -67,6 +67,25 @@
 
 1. Для решения задания 1 я не использовал [help](./help), а пользовался собственными манифестами.
 
+```Bash
+./src/ansible/roles/sync/files/stack/
+❯ tree
+.
+└── opt
+    └── monitoring_stack
+        ├── alertmanager
+        │   └── config.yml
+        ├── docker-compose.yml
+        ├── grafana
+        │   └── provisioning
+        │       └── dashboard.json
+        └── prometheus
+            ├── alert_rules.yml
+            └── prometheus.yml
+
+6 directories, 5 files
+```
+
 * Подключим Prometheus как источник данных в Graphana
 
 ![task1](./img/task1.jpeg)
@@ -75,14 +94,64 @@
 
 Добавим новые панели:
 
-* CPU utilization
-  - Метрика
+* Метрика `CPU utilization`
+  - PromQL
     - `100 - (rate(node_cpu_seconds_total{job="node", mode="idle"}[1m]) * 100)`
-* CPU load average
-  - Метрики
-    - node_load1{job="node"}
-    - node_load5{job="node"}
-    - node_load15{job="node"}
-* Disk free
-  - Метрика
-    - node_filesystem_free_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"}
+* Метрика `CPU load average`
+  - PromQL
+    - `node_load1{job="node"}`
+    - `node_load5{job="node"}`
+    - `node_load15{job="node"}`
+* Метрика `Disk free`
+  - PromQL
+    - `node_filesystem_free_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"}`
+* Метрика `Memory free`
+  - PromQL
+    - `node_memory_MemFree_bytes`
+
+![task2](./img/task2.jpeg)
+
+3. Создадим Alert для каждой панели
+
+Пример для панели `Memory free`
+![task3_1](./img/task3_1.jpeg)
+
+Вкладка Alert rules
+![task3_2](./img/task3_2.jpeg)
+
+Общий вид Dashboard
+![task3_3](./img/task3_3.jpeg)
+
+Канал нотификации заведен через Alertmanager.
+
+Для проверки нотификации в Telegram, остановим сервис node-exporter в docker.
+
+```bash
+docker stop exporter
+```
+
+Prometheus Status Target
+![task3_5](./img/task3_5.jpeg)
+
+Telegram Alert
+
+<img src="./img/task3_6.png" width="300">
+
+Telegram Resolve
+
+<img src="./img/task3_7.png" width="300">
+
+Также можно завести канал нотификации в Grafana Alerting Contact points
+![task3_4](./img/task3_4.jpeg)
+
+Telegram Alert
+
+<img src="./img/task3_8.png" width="300">
+
+Telegram Resolve
+
+<img src="./img/task3_9.png" width="300">
+
+4. Листинг dashboard.json
+
+[dashboard.json](./src/ansible/roles/sync/files/stack/opt/monitoring_stack/grafana/provisioning/dashboard.json)
