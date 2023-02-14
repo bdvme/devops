@@ -1,0 +1,31 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      - { role: ssh-keys, tags: "always" }
+      - { role: sync, tags: "always" }
+      - { role: tools_apt, vars: { tools_packages: ["python3",
+                                                   "python3-pip",
+                                                   "python3-setuptools",
+                                                   "git",
+                                                   "wget",
+                                                   "curl",
+                                                   "unzip",
+                                                   "gnupg",
+                                                   "software-properties-common",
+                                                   "ansible",
+                                                   "ansible-lint"
+                                                   ] }, tags: ["always"] }
+      - { role: docker, tags: "always" }
+      #- { role: proxy_set, tags: "always" }
+      #- { role: tor, tags: "always" }
+      #- { role: sync, tags: "always" }
+      #- { role: reboot, tags: "always" }
+      #- { role: sleep, vars: { count: "30" }, tags: "always" }
+      - { role: check_ip, tags: "always" }
+      - { role: check_dns, tags: "always" }
+      - { role: docker_login, tags: "always" }
+      #- { role: docker-compose, vars: { folder: "monitoring_stack", args: "--env-file=/opt/{{ folder }}/.env" }, tags: "always" }
+      #- { role: proxy_unset, tags: "always" }
