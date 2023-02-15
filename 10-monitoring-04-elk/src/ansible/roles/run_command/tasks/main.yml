@@ -1,0 +1,5 @@
+---
+  - name: Run command
+    command: "{{ item }}"
+    with_items:
+      "{{ cmd_line }}"

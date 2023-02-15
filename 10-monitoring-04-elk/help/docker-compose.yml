@@ -57,6 +57,8 @@ services:
     environment:
       ELASTICSEARCH_URL: http://es-hot:9200
       ELASTICSEARCH_HOSTS: '["http://es-hot:9200","http://es-warm:9200"]'
+    volumes:
+      - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml:Z
     networks:
       - elastic
     depends_on:
@@ -69,8 +71,8 @@ services:
     ports:
       - 5046:5046
     volumes:
-      - ./configs/logstash.conf:/etc/logstash/conf.d/logstash.conf:Z
-      - ./configs/logstash.yml:/opt/logstash/config/logstash.yml:Z
+      - ./configs/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:Z
+      - ./configs/logstash.yml:/usr/share/logstash/config/logstash.yml:Z
     networks:
       - elastic
     depends_on:
@@ -88,6 +90,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:Z
     depends_on:
       - logstash
+    command:
+      - "-e"
+      - "--strict.perms=false"
     networks:
       - elastic
 

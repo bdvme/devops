@@ -42,3 +42,4 @@
 * [10-monitoring-01-base "Why and what to monitoring"](https://github.com/bdvme/devops/tree/main/10-monitoring-01-base)
 * [10-monitoring-02-system "Monitoring systems"](https://github.com/bdvme/devops/tree/main/10-monitoring-02-system)
 * [10-monitoring-03-grafana "Grafana"](https://github.com/bdvme/devops/tree/main/10-monitoring-03-grafana)
+* [10-monitoring-04-elk "Elastic Stack"](https://github.com/bdvme/devops/tree/main/10-monitoring-04-elk)

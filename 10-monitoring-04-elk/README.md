@@ -64,4 +64,19 @@ Filebeat следует сконфигурировать для отправки
 
 ###### Ответы:
 
-1.
+1. 
+```bash
+vagrant@server01:/opt/monitoring_stack$ docker ps
+CONTAINER ID   IMAGE                          COMMAND                  CREATED          STATUS          PORTS                                                           NAMES
+a4b70bd94fa2   elastic/filebeat:7.2.0         "/usr/local/bin/dock…"   22 minutes ago   Up 20 minutes                                                                   filebeat
+457db535bc8a   elastic/logstash:6.3.2         "/usr/local/bin/dock…"   22 minutes ago   Up 20 minutes   5044/tcp, 9600/tcp, 0.0.0.0:5046->5046/tcp, :::5046->5046/tcp   logstash
+315e6e43847a   elastic/kibana:7.11.0          "/bin/tini -- /usr/l…"   22 minutes ago   Up 20 minutes   0.0.0.0:5601->5601/tcp, :::5601->5601/tcp                       kibana
+44ad7a6c2e64   elastic/elasticsearch:7.11.0   "/bin/tini -- /usr/l…"   22 minutes ago   Up 20 minutes   0.0.0.0:9200->9200/tcp, :::9200->9200/tcp, 9300/tcp             es-hot
+b53e87e9c827   elastic/elasticsearch:7.11.0   "/bin/tini -- /usr/l…"   22 minutes ago   Up 20 minutes   9200/tcp, 9300/tcp                                              es-warm
+2604f08edde0   python:3.9-alpine              "python3 /opt/run.py"    22 minutes ago   Up 20 minutes                                                                   some_app
+```
+
+![task1](./img/task1.jpeg)
+
+2. 
+![task2](./img/task2.jpeg)

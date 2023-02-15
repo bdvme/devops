@@ -24,8 +24,9 @@
       #- { role: sync, tags: "always" }
       #- { role: reboot, tags: "always" }
       #- { role: sleep, vars: { count: "30" }, tags: "always" }
-      - { role: check_ip, tags: "always" }
+      #- { role: check_ip, tags: "always" }
+      - { role: run_command, vars: { cmd_line: ["sysctl -w vm.max_map_count=262144"] }, tags: "always"}
       - { role: check_dns, tags: "always" }
       - { role: docker_login, tags: "always" }
-      #- { role: docker-compose, vars: { folder: "monitoring_stack", args: "--env-file=/opt/{{ folder }}/.env" }, tags: "always" }
+      - { role: docker-compose, vars: { folder: "monitoring_stack", args: "--env-file=/opt/{{ folder }}/.env" }, tags: "always" }
       #- { role: proxy_unset, tags: "always" }
