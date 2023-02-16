@@ -1,14 +1,11 @@
 ---
-# перечисление зависимостей роли
 dependency:
   name: galaxy
-#  указание параметров выбранного driver
 driver:
   name: docker
 lint: |
   yamllint .
   ansible-lint .
-# перечисление хостов для выбранного driver
 platforms:
   - name: vector-centos8
     image: quay.io/centos/centos:stream8
@@ -40,9 +37,7 @@ platforms:
       SUDO_GROUP: wheel
       DEPLOY_GROUP: deployer
       container: docker
-#  указание поставщика для molecule
 provisioner:
   name: ansible
-# выбор framework для проведения проверок
 verifier:
   name: ansible

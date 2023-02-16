@@ -15,7 +15,8 @@
                                                     "unzip",
                                                     "gnupg",
                                                     "ansible",
-                                                    "ansible-lint"
+                                                    "ansible-lint",
+                                                    "yamllint"
                                                     ] }, tags: ["always"] }
       - { role: tools_pip, tags: "always" }
       - { role: check_dns, tags: "always" }

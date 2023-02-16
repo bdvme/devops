@@ -6,12 +6,13 @@ NET = "192.168.99."
 DOMAIN = ".netology"
 HOST_PREFIX = "server"
 INVENTORY_PATH = "../ansible/inventory"
+TASK = "85"
 
 servers = [
   {
-    :hostname => HOST_PREFIX + "01" + DOMAIN,
-    :ip => NET + "101",
-    :ssh_host => "20101",
+    :hostname => HOST_PREFIX + TASK + "1" + DOMAIN,
+    :ip => NET + TASK,
+    :ssh_host => "20" + TASK + "1",
     :ssh_vm => "22",
     :ram => 1024,
     :core => 1,
