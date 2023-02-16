@@ -4,7 +4,7 @@
 ISO = "centos/7"
 NET = "192.168.99."
 DOMAIN = ".netology"
-HOST_PREFIX = "server"
+HOST_PREFIX = "server94"
 INVENTORY_PATH = "../ansible/inventory"
 
 servers = [
@@ -47,6 +47,9 @@ end
 
 Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: false
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+  config.ssh.forward_agent = true
   servers.each do |machine|
     config.vm.define machine[:hostname] do |node|
       node.vm.box = ISO

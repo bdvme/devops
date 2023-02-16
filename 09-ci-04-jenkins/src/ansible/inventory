@@ -2,6 +2,6 @@
 manager
 
 [manager]
-server1.netology ansible_host=127.0.0.1 ansible_port=20011 ansible_user=vagrant
-server2.netology ansible_host=127.0.0.1 ansible_port=20012 ansible_user=vagrant
-server3.netology ansible_host=127.0.0.1 ansible_port=20013 ansible_user=vagrant
+server941.netology ansible_host=127.0.0.1 ansible_port=20011 ansible_user=vagrant
+server942.netology ansible_host=127.0.0.1 ansible_port=20012 ansible_user=vagrant
+server943.netology ansible_host=127.0.0.1 ansible_port=20013 ansible_user=vagrant
