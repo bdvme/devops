@@ -1,0 +1,26 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Set variable
+      ansible.builtin.command: "vector --version"
+      register: vector_version_output
+
+    - name: Set variable
+      ansible.builtin.systemd:
+        name: "vector"
+      register: vector_service_status
+
+    - name: Set variable
+      ansible.builtin.uri:
+        url: http://127.0.0.1:8686/health
+        return_content: yes
+      register: vector_curl_output
+
+    - name: Assert
+      ansible.builtin.assert:
+        that:
+          - "'vector 0.22.0' in vector_version_output.stdout"
+          - "'active' in vector_service_status.status.ActiveState"
+          - "'\"ok\":true' in vector_curl_output.content"

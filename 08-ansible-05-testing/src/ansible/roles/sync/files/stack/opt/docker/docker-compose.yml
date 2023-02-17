@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  tox:
+    image: aragast/netology:latest
+    container_name: tox
+    stdin_open: true
+    tty: true
+    privileged: true
+    cap_add: 
+      - SYS_ADMIN
+    ports:
+      - 8686:8686
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /opt/playbook/roles/vector:/opt/vector-role
+    working_dir: /opt/vector-role
+    command: rm -rf /opt/vector-role/.tox/ && tox -r
+    environment:
+      TZ: "Europe/Moscow"

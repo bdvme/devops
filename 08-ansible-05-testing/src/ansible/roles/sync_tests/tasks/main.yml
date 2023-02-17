@@ -1,5 +1,5 @@
 ---
-  - name: Synchronization
+  - name: Test synchronization
     copy:
       src: stack/opt/tests/
       dest: "/opt/playbook/"
@@ -7,3 +7,12 @@
       group: root
       mode: 0644
     become: true
+  - name: Tox syncronization for vector roles
+    copy:
+      src: stack/opt/example/
+      dest: "/opt/playbook/roles/vector"
+      owner: root
+      group: root
+      mode: 0644
+    become: true
+
