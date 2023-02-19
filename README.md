@@ -43,3 +43,4 @@
 * [10-monitoring-02-system "Monitoring systems"](https://github.com/bdvme/devops/tree/main/10-monitoring-02-system)
 * [10-monitoring-03-grafana "Grafana"](https://github.com/bdvme/devops/tree/main/10-monitoring-03-grafana)
 * [10-monitoring-04-elk "Elastic Stack"](https://github.com/bdvme/devops/tree/main/10-monitoring-04-elk)
+* [10-monitoring-05-sentry "Sentry"](https://github.com/bdvme/devops/tree/main/10-monitoring-05-sentry)

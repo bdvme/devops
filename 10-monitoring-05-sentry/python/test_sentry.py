@@ -8,7 +8,7 @@ sentry_logging = LoggingIntegration(
 )
 
 sentry_sdk.init(
-    dsn="https://bb0d445b572949b0a294adcb2a393923@o4504695596843008.ingest.sentry.io/4504695771365376",
+    dsn="https://{token}.ingest.sentry.io/{id}",
     integrations=[sentry_logging],
 )
 
