@@ -1,0 +1,34 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      #- { role: ssh-keys, tags: "always" }
+      - { role: sync, tags: "always" }
+      #- { role: tools_apt, vars: { tools_packages: ["python3",
+      #                                             "python3-pip",
+      #                                             "python3-setuptools",
+      #                                             "openssl",
+      #                                             "git",
+      #                                             "wget",
+      #                                             "curl",
+      #                                             "unzip",
+      #                                             "gnupg",
+      #                                             "ansible",
+      #                                             "ansible-lint"
+      #                                             ] }, tags: ["always"] }
+      #- { role: check_dns, tags: "always" }
+      - { role: docker, tags: "always" }
+      - { role: make_ssl_keys, vars: { folder_gitlab: "/opt/gitlab/config/ssl", 
+                                       folder_gitlab_runner: "/opt/gitlab/runner/config",
+                                       hosts: "{{ gitlab_extra_hosts }}",
+                                       url_gitlab: "{{ gitlab_url }}",
+                                       url_registry: "{{ gitlab_url }}:5555" }, tags: "always" }
+      - { role: add_user, vars: { user: "gitlab-runner", group: "docker" }, tags: "always" }
+      - { role: docker_login, vars: { registry: "{{ docker_registry }}", username: "{{ docker_username }}", password: "{{ docker_password }}" }, tags: "always" }
+      - { role: docker_compose, vars: { folder: "gitlab", args: "", command: "down"}, tags: "always" }
+      - { role: docker_compose, vars: { folder: "gitlab", args: "", command: "up -d --remove-orphans"}, tags: "always" }
+      - { role: wait_url, vars: { url: "{{ gitlab_url }}:4433/-/health" }, tags: "always" }
+    #  - { role: docker_compose, vars: { folder: "gitlab/gitlab_runner", args: "", command: "down" }, tags: "always" }
+    #  - { role: docker_compose, vars: { folder: "gitlab/gitlab_runner", args: "", command: "up -d --remove-orphans" }, tags: "always" }

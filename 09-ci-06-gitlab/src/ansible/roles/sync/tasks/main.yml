@@ -1,0 +1,19 @@
+---
+  - name: Synchronization
+    copy:
+      src: stack/
+      dest: "/"
+      owner: root
+      group: root
+      mode: 0644
+    become: true
+  
+  - name: Create /opt/gitlab/docker-compose.yml file from template
+    template: 
+      src: gitlab.j2
+      dest: /opt/gitlab/docker-compose.yml
+
+  - name: Create /opt/gitlab/runner/docker-compose.yml file from template
+    template: 
+      src: runner.j2
+      dest: /opt/gitlab/runner/docker-compose.yml

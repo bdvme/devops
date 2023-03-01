@@ -1,0 +1,12 @@
+---
+  - name: Wait until HTTPS status is 200
+    uri:
+      url: "{{ url }}"
+      return_content: yes
+      validate_certs: no
+      status_code:
+        - 200
+    until: uri_output.status == 200
+    retries: 500 
+    delay: 5 
+    register: uri_output

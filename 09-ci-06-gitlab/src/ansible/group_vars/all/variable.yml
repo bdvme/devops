@@ -1,0 +1,37 @@
+proxy_env:
+  http_proxy: socks5://127.0.0.1:9050
+  https_proxy: socks5://127.0.0.1:9050
+yc_env:
+  yandex_token: "token"
+  yandex_zone: "zone"
+  yandex_cloud_id: "cloud-id"
+  yandex_folder_id: "folder-id"
+  yandex_image_id: "image-id"
+  yandex_service_acc: "service_acc"
+  yandex_service_acc_id: "service_acc-id"
+  yandex_profile: "profile01"
+  yandex_external_ip_address: "127.0.0.1"
+docker:
+  docker_registry: "registry"
+  docker_username: "username"
+  docker_password: "password"
+gitlab:
+  gitlab_registry: "registry"
+  gitlab_registry_https: "https://{{ gitlab_registry }}"
+  gitlab_username: "username"
+  gitlab_password: "password"
+  gitlab_url: "gitlab_url"
+  gitlab_url_https: "https://{{ gitlab_url }}"
+  gitlab_runner_token: "gitlab_runner_token"
+  gitlab_extra_hosts: "gitlab_extra_hosts"
+  docker_image: "docker_image"
+CA:
+  ca_c: "RU"                         # Страна
+  ca_st: "Ivanovskaya"               # Область
+  ca_l: "Gadukino"                   # Город
+  ca_o: "Krutie parni"               # Название организации
+  ca_ou: "Sysopka"                   # Название отделения
+  ca_cn: "Your personal certificate" # Имя для сертификата(персоны, получающей сертификат)
+  ca_days: "365"                     # Сертификат действителен, дней
+
+

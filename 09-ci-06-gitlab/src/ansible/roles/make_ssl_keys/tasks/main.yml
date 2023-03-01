@@ -1,0 +1,65 @@
+---
+  - name: Create external config file
+    lineinfile:
+      path: "{{ folder_gitlab }}/extfile.cnf"
+      line: subjectAltName = DNS:{{ url_gitlab }}
+      create: yes
+  - name: Add {{ url_gitlab }} to hosts file
+    lineinfile:
+      path: "/etc/hosts"
+      line: "{{ hosts }} {{ url_gitlab }}"
+      state: present
+  - name: Make openssl key for server
+    command: "{{ item }}"
+    with_items:
+      - openssl genrsa -out {{ folder_gitlab }}/ca.key 2048
+      - openssl req -new -x509 -days {{ ca_days }} -key {{ folder_gitlab }}/ca.key -subj "/C={{ ca_c }}/ST={{ ca_st }}/L={{ ca_l }}/O={{ ca_o }}/CN={{ ca_cn }}" -out {{ folder_gitlab }}/ca.crt
+      - openssl req -newkey rsa:2048 -nodes -keyout {{ folder_gitlab }}/server.key -subj "/C={{ ca_c }}/ST={{ ca_st }}/L={{ ca_l }}/O={{ ca_o }}/CN={{ url_gitlab }}" -out {{ folder_gitlab }}/server.csr
+      - openssl x509 -req -extfile {{ folder_gitlab }}/extfile.cnf -days {{ ca_days }} -in {{ folder_gitlab }}/server.csr -CA {{ folder_gitlab }}/ca.crt -CAkey {{ folder_gitlab }}/ca.key -CAcreateserial -out {{ folder_gitlab }}/server.crt
+  - name: Copy CA files to gitlab runner
+    copy:
+      src: "{{ folder_gitlab }}/{{ item }}"
+      dest: "{{ folder_gitlab_runner }}"
+      owner: root
+      group: root
+      mode: 0644
+      remote_src: yes
+    loop:
+      - server.crt
+      - server.csr
+      - server.key
+  - name: Create folder {{ url_registry }} in docker certs.d directory
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0775
+    loop:
+      - /root/.docker/certs.d
+      - /root/.docker/certs.d/{{ url_registry }}
+  - name: Copy CA files to Docker
+    copy:
+      src: "{{ folder_gitlab }}/{{ item }}"
+      dest: "/root/.docker/certs.d/{{ url_registry }}/ca.crt"
+      owner: root
+      group: root
+      mode: 0644
+      remote_src: yes
+    loop:
+      - server.crt
+    
+  - name: Copy CA files to /usr/local/share/ca-certificates
+    copy:
+      src: "{{ folder_gitlab }}/{{ item }}"
+      dest: "/usr/local/share/ca-certificates"
+      owner: root
+      group: root
+      mode: 0644
+      remote_src: yes
+    loop:
+      - server.crt
+
+  - name: Update ca-certificates
+    command: update-ca-certificates
+

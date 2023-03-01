@@ -1,0 +1,57 @@
+version: '3.6'
+services:
+  web:
+    image: 'gitlab/gitlab-ee:latest'
+    restart: always
+    hostname: '{{ gitlab_url }}'
+    extra_hosts:
+      - "{{ gitlab_url }}:{{ gitlab_extra_hosts }}"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '{{ gitlab_url_https }}:4433'
+        registry_external_url '{{ gitlab_registry_https }}:5555'
+        gitlab_rails['gitlab_shell_ssh_port']=2022
+        gitlab_rails['registry_enabled'] = true
+        gitlab_rails['monitoring_whitelist'] = ['127.0.0.1', '192.168.99.0/8']
+        letsencrypt['enable'] = false
+        registry['enable'] = true
+        nginx['redirect_http_to_https'] = true
+        nginx['ssl_verify_client'] = "off"
+        nginx['ssl_certificate'] = "/etc/gitlab/ssl/server.crt"
+        nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/server.key"
+        registry_nginx['enable'] = true
+        registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/server.crt"
+        registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/server.key"
+        registry_nginx['listen_port'] = 5555
+        registry_nginx['redirect_http_to_https'] = true
+        # Add any other gitlab.rb configuration here, each on its own line
+    ports:
+      - '8080:80'
+      - '4433:4433'
+      - '2022:22'
+      - '5555:5555'
+    volumes:
+      - './config:/etc/gitlab'
+      - './config/ssl:/etc/gitlab/ssl/'
+      - './logs:/var/log/gitlab'
+      - './data:/var/opt/gitlab'
+    shm_size: '256m'
+    networks:
+      - gitlab_net
+  runner:
+    restart: always
+    image: gitlab/gitlab-runner:latest
+    depends_on:
+      - web
+    environment:
+      - GIT_SSL_NO_VERIFY=true
+    extra_hosts:
+      - "{{ gitlab_url }}:{{ gitlab_extra_hosts }}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./runner/config:/etc/gitlab-runner:z
+      - ./runner/ssh-key:/home/gitlab-runner/.ssh:z
+    networks:
+      - gitlab_net
+networks:
+  gitlab_net:

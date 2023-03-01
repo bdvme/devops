@@ -1,0 +1,7 @@
+---
+  - name: Add user {{ user }} and make access to {{ group }} group
+    user:
+      name: "{{ user }}"
+      shell: /bin/bash
+      groups: "{{ group }}"
+      append: yes

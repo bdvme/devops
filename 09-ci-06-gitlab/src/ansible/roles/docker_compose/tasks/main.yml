@@ -1,0 +1,4 @@
+---
+  - name: Run docker-compose command {{ command }}
+    command: docker-compose -f /opt/{{ folder }}/docker-compose.yml {{ args }} {{ command }}
+    timeout: 3600

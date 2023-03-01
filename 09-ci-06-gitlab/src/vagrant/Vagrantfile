@@ -1,0 +1,82 @@
+# -*- mode: ruby -*-
+
+ISO = "bento/ubuntu-20.04"
+NET = "192.168.99."
+DOMAIN = ".netology"
+HOST_PREFIX = "server"
+INVENTORY_PATH = "../ansible/inventory"
+
+TASK = "96"
+
+servers = [
+  {
+    :hostname => HOST_PREFIX + TASK + "1" + DOMAIN,
+    :ip => NET + TASK,
+    :ssh_host => "20" + TASK + "1",
+    :ssh_vm => "22",
+    :ram => 4096,
+    :core => 4,
+    :tags => "",
+    :verbose => "true"
+  }
+]
+
+
+env = {}
+File.read(".env").split("\n").each do |ef|
+  env[ef.split("=")[0]] = ef.split("=")[1]
+end
+
+Vagrant.configure(2) do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+  config.ssh.forward_agent = true
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = ISO
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip]
+      node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+      node.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+        vb.customize ["modifyvm", :id, "--cpus", machine[:core]]
+        vb.name = machine[:hostname]
+      end
+      node.vm.provision "ansible" do |setup|
+        setup.inventory_path = INVENTORY_PATH
+        setup.playbook = "../ansible/provision.yml"
+        setup.tags=machine[:tags]
+        setup.become = true
+        setup.extra_vars = {
+          ansible_user: 'vagrant',
+          yandex_token: env['yandex_token'],
+          yandex_zone: env['yandex_zone'],
+          yandex_cloud_id: env['yandex_cloud_id'],
+          yandex_folder_id: env['yandex_folder_id'],
+          yandex_service_acc: env['yandex_service_acc'],
+          yandex_profile: env['yandex_profile'],
+          docker_registry: env['docker_registry'],
+          docker_username: env['docker_username'],
+          docker_password: env['docker_password'],
+          gitlab_registry: env['gitlab_registry'],
+          gitlab_registry_https: env['gitlab_registry_https'],
+          gitlab_username: env['gitlab_username'],
+          gitlab_password: env['gitlab_password'],
+          docker_image: env['docker_image'],
+          gitlab_url: env['gitlab_url'],
+          gitlab_url_https: env['gitlab_url_https'],
+          gitlab_runner_token: env['gitlab_runner_token'],
+          gitlab_extra_hosts: env['gitlab_extra_hosts'],
+          ca_c: env['ca_c'],
+          ca_st: env['ca_st'],
+          ca_l: env['ca_l'],
+          ca_o: env['ca_o'],
+          ca_ou: env['ca_ou'],
+          ca_cn: env['ca_cn'],
+          ca_days: env['ca_days']
+        }
+      end
+    end
+  end
+end

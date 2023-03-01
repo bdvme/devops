@@ -1,0 +1,30 @@
+version: "3.5"
+services:
+  register-runner:
+    restart: 'no'
+    image: gitlab/gitlab-runner:latest
+    environment:
+      - CI_SERVER_URL={{ gitlab_url_https }}:4433
+      - REGISTRATION_TOKEN={{ gitlab_runner_token }}
+      - GIT_SSL_NO_VERIFY=true
+    extra_hosts:
+      - "{{ gitlab_url }}:{{ gitlab_extra_hosts }}"
+    command:
+      - register
+      - --non-interactive
+      - --locked=false
+      - --name=python_project
+      - --executor=docker
+      - --docker-tlsverify=false
+      - --docker-image={{ docker_image }}
+      - --docker-privileged=true
+      - --docker-network-mode=gitlab_gitlab_net
+      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+      - --tls-ca-file=/etc/gitlab-runner/server.crt
+      - --tag-list=ansible,python
+      - --run-untagged=true
+      - --docker-extra-hosts={{ gitlab_url }}:{{ gitlab_extra_hosts }}
+      - --env=GIT_SSL_NO_VERIFY=true
+      - --clone-url={{ gitlab_url_https }}:4433
+    volumes:
+      - ./config:/etc/gitlab-runner:z
