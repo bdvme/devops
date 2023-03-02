@@ -85,7 +85,7 @@ ca_c=RU
 ca_st=Moscow
 ca_l=Moscow
 ca_o=Netology
-ca_ou=DevOps 
+ca_ou=DevOps
 ca_cn=Personal Certificate
 ca_days=365
 ```
@@ -102,9 +102,9 @@ vagrant up
 
 ## Основная часть
 
-## Первичная настройка сервера GitLab 
+## Первичная настройка сервера GitLab
 
-- Получим пароль администратора GitLab с помощью команды ВМ: 
+- Получим пароль администратора GitLab с помощью команды ВМ:
 
 ```bash
 vagrant ssh -c "cat /opt/gitlab/config/initial_root_password"
@@ -117,7 +117,7 @@ cat /etc/hosts
 192.168.99.96 gitlab.netology.local
 ```
 
-- Откроем веб панель управления GitLab 
+- Откроем веб панель управления GitLab
 
 ```bash
 https://gitlab.netology.local:4433
@@ -210,7 +210,7 @@ cat README.md
 
 # netology
 
-Simple python project 
+Simple python project
 ```
 
 - Подключим к репозиторию сервер Gitlab
@@ -299,7 +299,7 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
 ```
 
-- Проверим, что GitLab Runner подключился в панели управления GitLab 
+- Проверим, что GitLab Runner подключился в панели управления GitLab
 
 ![0906gitlab05](./img/0906gitlab05.jpeg)
 
@@ -327,7 +327,7 @@ CI_REGISTRY_IMAGE=gitlab.netology.local:5555/bdv/netology
 
 ![0906gitlab08](./img/0906gitlab08.jpeg)
 
-- Создадим отедльную ветку для изменения
+- Создадим отдельную ветку для изменения
 
 ![0906gitlab09](./img/0906gitlab09.jpeg)
 

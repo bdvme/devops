@@ -4,21 +4,21 @@
     become_user: root
     remote_user: vagrant
     roles:
-      #- { role: ssh-keys, tags: "always" }
+      - { role: ssh-keys, tags: "always" }
       - { role: sync, tags: "always" }
-      #- { role: tools_apt, vars: { tools_packages: ["python3",
-      #                                             "python3-pip",
-      #                                             "python3-setuptools",
-      #                                             "openssl",
-      #                                             "git",
-      #                                             "wget",
-      #                                             "curl",
-      #                                             "unzip",
-      #                                             "gnupg",
-      #                                             "ansible",
-      #                                             "ansible-lint"
-      #                                             ] }, tags: ["always"] }
-      #- { role: check_dns, tags: "always" }
+      - { role: tools_apt, vars: { tools_packages: ["python3",
+                                                   "python3-pip",
+                                                   "python3-setuptools",
+                                                   "openssl",
+                                                   "git",
+                                                   "wget",
+                                                   "curl",
+                                                   "unzip",
+                                                   "gnupg",
+                                                   "ansible",
+                                                   "ansible-lint"
+                                                   ] }, tags: ["always"] }
+      - { role: check_dns, tags: "always" }
       - { role: docker, tags: "always" }
       - { role: make_ssl_keys, vars: { folder_gitlab: "/opt/gitlab/config/ssl", 
                                        folder_gitlab_runner: "/opt/gitlab/runner/config",

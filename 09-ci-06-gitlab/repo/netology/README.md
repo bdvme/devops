@@ -1,0 +1,3 @@
+# netology
+
+Simple python project 
