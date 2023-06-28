@@ -49,3 +49,4 @@
 * [11-microservices-01-intro "Microservices: Intro"](https://github.com/bdvme/devops/tree/main/11-microservices-01-intro)
 * [11-microservices-02-principles "Microservices: Principles"](https://github.com/bdvme/devops/tree/main/11-microservices-02-principles)
 * [11-microservices-03-approaches "Microservices: Approaches"](https://github.com/bdvme/devops/tree/main/11-microservices-03-approaches)
+* [11-microservices-04-scaling "Microservices: Scaling"](https://github.com/bdvme/devops/tree/main/11-microservices-04-scaling)
