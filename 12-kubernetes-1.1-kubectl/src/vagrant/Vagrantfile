@@ -1,0 +1,59 @@
+# -*- mode: ruby -*-
+
+ISO = "bento/ubuntu-20.04"
+NET = "192.168.99."
+DOMAIN = ".netology"
+HOST_PREFIX = "server"
+
+servers = [
+  {
+    :hostname => HOST_PREFIX + "01" + DOMAIN,
+    :ip => NET + "101",
+    :ssh_host => "20101",
+    :ssh_vm => "22",
+    :microk8s_host => "10443",
+    :microk8s_vm => "443",
+    :ram => 4096,
+    :core => 1,
+    :tags => "",
+    :verbose => "true"
+  }
+]
+
+Vagrant.configure(2) do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+  config.ssh.forward_agent = true
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = ISO
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip]
+      node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+      node.vm.network :forwarded_port, guest: machine[:microk8s_vm], host: machine[:microk8s_host]
+      node.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+        vb.customize ["modifyvm", :id, "--cpus", machine[:core]]
+        vb.name = machine[:hostname]
+      end
+      node.vm.provision "shell", inline: <<-EOF
+        apt update
+        apt install -y snapd curl
+        snap install microk8s --classic
+        mkdir -p $HOME/.kube/
+        microk8s.status --wait-ready
+        microk8s.enable dns dashboard registry
+        usermod -a -G microk8s vagrant
+        chown -f -R vagrant ~/.kube
+        newgrp microk8s
+        echo "alias kubectl='microk8s.kubectl'" > /home/vagrant/.bash_aliases
+        chown vagrant:vagrant /home/vagrant/.bash_aliases
+        echo "alias kubectl='microk8s.kubectl'" > /root/.bash_aliases
+        chown root:root /root/.bash_aliases
+        microk8s kubectl config view --raw > $HOME/.kube/config
+        microk8s refresh-certs --cert front-proxy-client.crt
+      EOF
+    end
+  end
+end
