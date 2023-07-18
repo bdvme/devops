@@ -51,3 +51,4 @@
 * [11-microservices-03-approaches "Microservices: Approaches"](https://github.com/bdvme/devops/tree/main/11-microservices-03-approaches)
 * [11-microservices-04-scaling "Microservices: Scaling"](https://github.com/bdvme/devops/tree/main/11-microservices-04-scaling)
 * [12-kubernetes-1.1-kubectl "Kubernetes. Reasons for appearance. kubectl command"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.1-kubectl)
+* [12-kubernetes-1.2-base-objects-k8s "Kubernetes. Base objects K8S"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.2-base-objects-k8s)
