@@ -54,3 +54,4 @@
 * [12-kubernetes-1.2-base-objects-k8s "Kubernetes. Base objects K8S"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.2-base-objects-k8s)
 * [12-kubernetes-1.3-deployment "Kubernetes. Running applications in K8S"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.3-deployment)
 * [12-kubernetes-1.4-networking-k8s-p1 "Kubernetes. Networking in K8S. Part 1"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.4-networking-k8s-p1)
+* [12-kubernetes-1.5-networking-k8s-p2 "Kubernetes. Networking in K8S. Part 2"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.5-networking-k8s-p2)
