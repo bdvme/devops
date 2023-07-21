@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: backend
+  labels:
+    app: backend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - mountPath: /logs
+              name: log
+      volumes:
+        - hostPath:
+            path: /var/log
+          name: log   
