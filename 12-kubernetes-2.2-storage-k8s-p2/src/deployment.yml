@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              while true; 
+              do 
+                echo "$(date) Hello Netology!" >> /msg-out-path/test
+                sleep 5
+              done
+          volumeMounts:
+            - mountPath: /msg-out-path
+              name: msg-volume
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - mountPath: /msg-in-path
+              name: msg-volume
+      volumes:
+        - name: msg-volume
+          persistentVolumeClaim:
+            claimName: local-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vagrant/
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
