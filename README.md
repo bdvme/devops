@@ -56,3 +56,4 @@
 * [12-kubernetes-1.4-networking-k8s-p1 "Kubernetes. Networking in K8S. Part 1"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.4-networking-k8s-p1)
 * [12-kubernetes-1.5-networking-k8s-p2 "Kubernetes. Networking in K8S. Part 2"](https://github.com/bdvme/devops/tree/main/12-kubernetes-1.5-networking-k8s-p2)
 * [13-kubernetes-3.1-components-k8s "Kubernetes. K8S components"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.1-components-k8s)
+* [13-kubernetes-3.2-install-k8s "Kubernetes. Install K8S"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.2-install-k8s)

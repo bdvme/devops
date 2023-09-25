@@ -1,0 +1,128 @@
+# -*- mode: ruby -*-
+# Vagrant variables
+DEFAULT_BOX_NAME = "bento/ubuntu-20.04"
+NET = "192.168.99."
+DOMAIN = ".netology"
+INVENTORY_PATH = "../ansible/inventory"
+HOST_PREFIX_MASTER = "master"
+HOST_PREFIX_WORKER = "worker"
+VAGRANTFILE_API_VERSION = "2"
+
+servers = [
+  {
+    :hostname => HOST_PREFIX_MASTER + "01" + DOMAIN,
+    :ip => NET + "101",
+    :ssh_host => "20101",
+    :ssh_vm => "22",
+    :ram => 2048,
+    :core => 2,
+    :tags => "master",
+    :verbose => "false"
+  },
+  {
+    :hostname => HOST_PREFIX_WORKER + "01" + DOMAIN,
+    :ip => NET + "201",
+    :ssh_host => "20201",
+    :ssh_vm => "22",
+    :ram => 2048,
+    :core => 1,
+    :tags => "worker",
+    :verbose => "false"
+  },
+  {
+    :hostname => HOST_PREFIX_WORKER + "02" + DOMAIN,
+    :ip => NET + "202",
+    :ssh_host => "20202",
+    :ssh_vm => "22",
+    :ram => 2048,
+    :core => 1,
+    :tags => "worker",
+    :verbose => "false"
+  },
+  {
+    :hostname => HOST_PREFIX_WORKER + "03" + DOMAIN,
+    :ip => NET + "203",
+    :ssh_host => "20203",
+    :ssh_vm => "22",
+    :ram => 2048,
+    :core => 1,
+    :tags => "worker",
+    :verbose => "false"
+  },
+  {
+    :hostname => HOST_PREFIX_WORKER + "04" + DOMAIN,
+    :ip => NET + "204",
+    :ssh_host => "20204",
+    :ssh_vm => "22",
+    :ram => 2048,
+    :core => 1,
+    :tags => "worker",
+    :verbose => "false"
+  }
+]
+
+# Check for missing plugins
+required_plugins = %w(vagrant-hostmanager vagrant-scp vagrant-env)
+plugin_installed = false
+required_plugins.each do |plugin|
+  unless Vagrant.has_plugin?(plugin)
+    system "vagrant plugin install #{plugin}"
+    plugin_installed = true
+  end
+end
+
+# If new plugins installed, restart Vagrant process
+if plugin_installed === true
+  exec "vagrant #{ARGV.join' '}"
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  
+  # vagrant-hostmanager options
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+  # vagrant-env options
+  config.env.enable
+
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+  config.ssh.forward_agent = true
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = machine[:box] ? machine[:box] : DEFAULT_BOX_NAME;
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip]
+      node.vm.network :forwarded_port, guest: machine[:ssh_vm], host: machine[:ssh_host]
+      
+      memory = machine[:ram];
+      cpus = machine[:core];
+      
+      node.vm.provider "virtualbox" do |vb|
+        vb.customize [
+          "modifyvm", :id,
+          "--memory", memory.to_s,
+          "--cpus", cpus.to_s,
+          "--ioapic", "on",
+          "--natdnshostresolver1", "on",
+          "--natdnsproxy1", "on"
+        ]
+        vb.name = machine[:hostname]
+      end
+      node.vm.provision "ansible" do |setup|
+        setup.inventory_path = INVENTORY_PATH
+        setup.playbook = "../ansible/provision.yml"
+        setup.tags=machine[:tags]
+#        setup.become = true
+        setup.verbose = machine[:verbose]
+        setup.extra_vars = {
+          ansible_user: 'vagrant'
+        }
+      end
+    end
+  end
+end

@@ -1,0 +1,6 @@
+---
+  - name: Get {{ distr }} distrib
+    git:
+      repo: "{{ distr_repo }}"
+      version: master
+      dest: "{{ distr_dir }}"

@@ -1,0 +1,18 @@
+---
+  - hosts: nodes
+    become: yes
+    become_user: root
+    remote_user: vagrant
+    roles:
+      - { role: ssh-keys, tags: "always" }
+      - { role: check_dns, tags: "always" }
+      - { role: tools, vars: { tools_packages: ["python3.9",
+                                                "curl",
+                                                "git",
+                                                "software-properties-common",
+                                                "sshpass"
+                                                ] }, tags: ["master"] }
+      - { role: git_clone, vars: { distr: "Kubespray", 
+                                   distr_repo: "https://github.com/kubernetes-sigs/kubespray.git",
+                                   distr_dir: "/opt/kubespray" }, tags: ["master"]}
+      - { role: kubespray, vars: { distr_dir: "/opt/kubespray" }, tags: ["master"]}

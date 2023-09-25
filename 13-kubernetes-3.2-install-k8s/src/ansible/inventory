@@ -1,0 +1,12 @@
+[nodes:children]
+k8s-master
+k8s-worker
+
+[k8s-master]
+master01.netology ansible_host=127.0.0.1 ip=192.168.99.101 ansible_port=20101 ansible_user=vagrant
+
+[k8s-worker]
+worker01.netology ansible_host=127.0.0.1 ip=192.168.99.201 ansible_port=20201 ansible_user=vagrant
+worker02.netology ansible_host=127.0.0.1 ip=192.168.99.202 ansible_port=20202 ansible_user=vagrant
+worker03.netology ansible_host=127.0.0.1 ip=192.168.99.203 ansible_port=20203 ansible_user=vagrant
+worker04.netology ansible_host=127.0.0.1 ip=192.168.99.204 ansible_port=20204 ansible_user=vagrant

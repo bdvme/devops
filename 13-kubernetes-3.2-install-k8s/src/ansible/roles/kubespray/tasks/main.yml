@@ -1,0 +1,50 @@
+---
+  - name: Install pip3.9
+    command: "{{ item }}"
+    with_items:
+      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      - python3.9 get-pip.py
+    args:
+      chdir: "{{ distr_dir }}"
+  - name: Install specified python requirements
+    pip:
+      requirements: "{{ distr_dir }}/requirements.txt"
+  
+  - name: Prepare cluster
+    command: "{{ item }}"
+    with_items:
+      - cp -rfp inventory/sample inventory/cluster
+    args:
+      chdir: "{{ distr_dir }}"
+  
+  - name: Make {{ distr_dir }}/inventory/cluster/hosts.yml
+    template:
+        src: hosts.yml.j2
+        dest: "{{ distr_dir }}/inventory/cluster/hosts.yml"
+        mode: 0644
+  - name: Copy files to {{ distr_dir }}
+    copy:
+      src: k8s-cluster.yml
+      dest: "{{ distr_dir }}/inventory/cluster/group_vars/k8s_cluster/k8s-cluster.yml"
+      owner: root
+      group: root
+      mode: 0644
+    become: true
+
+  - name: Copy files to {{ distr_dir }}
+    copy:
+      src: k8s.sh
+      dest: "{{ distr_dir }}/k8s.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: u+x,g=r,o=r
+    become: true
+  
+  - name: Make directory for kubernetes config
+    file:
+      path: "/home/{{ ansible_user }}/.kube"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      state: directory
+      mode: 0755
+

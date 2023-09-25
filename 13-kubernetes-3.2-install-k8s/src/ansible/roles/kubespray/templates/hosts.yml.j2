@@ -1,0 +1,55 @@
+all:
+  hosts:
+    master01:
+      ansible_host: {{ hostvars[groups['k8s-master'][0]].ip }}
+      ip: {{ hostvars[groups['k8s-master'][0]].ip }}
+      access_ip: {{ hostvars[groups['k8s-master'][0]].ip }}
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    worker01:
+      ansible_host: {{ hostvars[groups['k8s-worker'][0]].ip }}
+      ip: {{ hostvars[groups['k8s-worker'][0]].ip }}
+      access_ip: {{ hostvars[groups['k8s-worker'][0]].ip }}
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    worker02:
+      ansible_host: {{ hostvars[groups['k8s-worker'][1]].ip }}
+      ip: {{ hostvars[groups['k8s-worker'][1]].ip }}
+      access_ip: {{ hostvars[groups['k8s-worker'][1]].ip }}
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    worker03:
+      ansible_host: {{ hostvars[groups['k8s-worker'][2]].ip }}
+      ip: {{ hostvars[groups['k8s-worker'][2]].ip }}
+      access_ip: {{ hostvars[groups['k8s-worker'][2]].ip }}
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+    worker04:
+      ansible_host: {{ hostvars[groups['k8s-worker'][3]].ip }}
+      ip: {{ hostvars[groups['k8s-worker'][3]].ip }}
+      access_ip: {{ hostvars[groups['k8s-worker'][3]].ip }}
+      ssh_key_info:
+        ssh_public_key: "~/.ssh/id_rsa.pub"
+  vars:
+    ansible_connection: ssh
+    ansible_user: vagrant
+    ansible_ssh_pass: vagrant
+  children:
+    kube_control_plane:
+      hosts:
+        master01:
+    kube_node:
+      hosts:
+        worker01:
+        worker02:
+        worker03:
+        worker04:
+    etcd:
+      hosts:
+        master01:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+    calico_rr:
+      hosts: {}

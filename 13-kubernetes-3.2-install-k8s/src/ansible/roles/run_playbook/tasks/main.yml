@@ -1,0 +1,5 @@
+---
+  - name: Run ansible-playbook {{ playbook }}
+    command: "{{ playbook }}"
+    args:
+      chdir: "{{ distr_dir }}"

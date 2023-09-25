@@ -1,0 +1,7 @@
+---
+  - name: Copy admin.conf
+    shell: |
+      cp {{ distr_dir }}/inventory/cluster/artifacts/admin.conf /home/{{ ansible_user }}/.kube/config
+      cp {{ distr_dir }}/inventory/cluster/artifacts/kubectl /usr/local/bin/kubectl
+      chown {{ ansible_user }}:{{ ansible_user }} /home/{{ ansible_user }}/.kube/config
+    become: true
