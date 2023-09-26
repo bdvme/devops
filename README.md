@@ -59,3 +59,4 @@
 * [13-kubernetes-3.2-install-k8s "Kubernetes. Install K8s"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.2-install-k8s)
 * [13-kubernetes-3.3-network-k8s "How the network works in K8s"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.3-network-k8s)
 * [13-kubernetes-3.4-application-update-k8s "Application Update"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.4-application-update-k8s)
+* [13-kubernetes-3.5-troubleshooting-k8s "Troubleshooting"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.5-troubleshooting-k8s)
