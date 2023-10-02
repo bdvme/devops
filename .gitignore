@@ -38,6 +38,8 @@ terraform.rc
 
 # Yandex Cloud credentials
 key.json
+key_admin.json
+key_editor.json
 .env
 
 #vagrant

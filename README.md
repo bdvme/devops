@@ -61,3 +61,4 @@
 * [13-kubernetes-3.4-application-update-k8s "Application Update"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.4-application-update-k8s)
 * [13-kubernetes-3.5-troubleshooting-k8s "Troubleshooting"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.5-troubleshooting-k8s)
 * [14-cloud-providers-1.1-networking "Networking"](https://github.com/bdvme/devops/tree/main/14-cloud-providers-1.1-networking)
+* [14-cloud-providers-1.2-computing-power "Computing power. Load Balancers"](https://github.com/bdvme/devops/tree/main/14-cloud-providers-1.2-computing-power)
