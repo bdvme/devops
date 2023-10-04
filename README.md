@@ -62,3 +62,4 @@
 * [13-kubernetes-3.5-troubleshooting-k8s "Troubleshooting"](https://github.com/bdvme/devops/tree/main/13-kubernetes-3.5-troubleshooting-k8s)
 * [14-cloud-providers-1.1-networking "Networking"](https://github.com/bdvme/devops/tree/main/14-cloud-providers-1.1-networking)
 * [14-cloud-providers-1.2-computing-power "Computing power. Load Balancers"](https://github.com/bdvme/devops/tree/main/14-cloud-providers-1.2-computing-power)
+* [14-cloud-providers-1.3-security "Security in cloud providers"](https://github.com/bdvme/devops/tree/main/14-cloud-providers-1.3-security)
